@@ -19,6 +19,7 @@ const PARTNER_LABELS = Object.freeze({
 });
 const state = {
   step: 0,
+  countryFocusIndex: -1,
   worldPopulation: FALLBACK_WORLD,
   livePopulation: FALLBACK_WORLD,
   dataYear: 2024,
@@ -33,6 +34,18 @@ const state = {
 
 const fmt = new Intl.NumberFormat('en-US');
 const compactFmt = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 });
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let resultAnnouncementTimer;
+
+function scrollToElement(element, block = 'start') {
+  element.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block });
+}
+
+function focusElement(element) {
+  if (!element) return;
+  element.setAttribute('tabindex', '-1');
+  window.requestAnimationFrame(() => element.focus({ preventScroll: true }));
+}
 
 function selectedValue(name) {
   return $(`input[name="${name}"]:checked`)?.value;
@@ -90,6 +103,7 @@ const fallbackCountries = [
 fallbackCountries.forEach(c => state.countryPopulations.set(c.code, c.population));
 
 function animateCounter() {
+  if (reduceMotion.matches) return;
   const perSecond = state.livePopulation * ANNUAL_GROWTH / 31_556_952;
   window.setInterval(() => {
     if (state.step === 0 && state.selectedCountries.length === 0) {
@@ -267,7 +281,7 @@ function calculateModel() {
   return { base, factors: activeFactors, product, pool: Math.round(base * product) };
 }
 
-function recalculate() {
+function recalculate(announce = false) {
   const model = calculateModel();
   state.basePopulation = model.base;
   $('#populationNumber').textContent = fmt.format(model.pool);
@@ -286,6 +300,19 @@ function recalculate() {
   $('#shareFill').style.width = `${Math.max(percent > 0 ? .7 : 0, Math.min(100, percent))}%`;
   renderLedger(model.factors);
   if (state.step === 6) renderOdds(model);
+  if (announce) scheduleResultAnnouncement(model, percent);
+}
+
+function scheduleResultAnnouncement(model, percent) {
+  window.clearTimeout(resultAnnouncementTimer);
+  resultAnnouncementTimer = window.setTimeout(() => {
+    const percentText = percent < .01 ? 'less than 0.01 percent' : `${percent.toFixed(percent < 1 ? 2 : 1)} percent`;
+    let message = `Estimated partner pool: ${fmt.format(model.pool)} people, ${percentText} of the starting population.`;
+    if (state.step === 6) {
+      message += ` Estimated time to a 20 percent chance: ${$('#chance20').textContent}; 50 percent: ${$('#chance50').textContent}; 80 percent: ${$('#chance80').textContent}.`;
+    }
+    $('#resultStatus').textContent = message;
+  }, 350);
 }
 
 function uncertaintyForStep() {
@@ -345,13 +372,16 @@ function showStep(nextStep) {
   $$('.step').forEach((el,i) => el.classList.toggle('active', i === state.step));
   $('#stepLabel').textContent = `${String(state.step+1).padStart(2,'0')} / 07`;
   $('#progressFill').style.width = `${(state.step+1)/7*100}%`;
+  $('#progressTrack').setAttribute('aria-valuenow', String(state.step + 1));
+  $('#progressTrack').setAttribute('aria-valuetext', `Step ${state.step + 1} of 7`);
   $('#backButton').style.visibility = state.step ? 'visible' : 'hidden';
   $('#nextButton span:first-child').textContent = state.step === 6 ? 'See results' : 'Continue';
   $('#nextButton span:last-child').textContent = state.step === 6 ? '↑' : '→';
   if (state.step < 6) $('#oddsPanel').classList.remove('visible');
   if (state.step === 2) syncOrientationDefault();
-  recalculate();
-  $('.question-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  recalculate(true);
+  scrollToElement($('.question-panel'));
+  focusElement($('.step.active h2'));
 }
 
 function syncOrientationDefault() {
@@ -398,8 +428,25 @@ function renderCountryResults(query) {
   const root = $('#countryResults');
   const q = query.trim().toLowerCase();
   const matches = state.countries.filter(c => !state.selectedCountries.includes(c.code) && (!q || c.name.toLowerCase().includes(q))).slice(0, 10);
-  root.innerHTML = matches.map(c => `<div class="country-result" role="option" data-code="${c.code}"><span>${c.name}</span><span>${compactFmt.format(state.countryPopulations.get(c.code) || c.population || 0)}</span></div>`).join('');
-  root.classList.toggle('open', !!q && matches.length > 0);
+  root.innerHTML = matches.map(c => `<div class="country-result" id="country-option-${c.code}" role="option" aria-selected="false" data-code="${c.code}"><span>${c.name}</span><span>${compactFmt.format(state.countryPopulations.get(c.code) || c.population || 0)}</span></div>`).join('');
+  const isOpen = !!q && matches.length > 0;
+  root.classList.toggle('open', isOpen);
+  $('#countrySearch').setAttribute('aria-expanded', String(isOpen));
+  $('#countrySearch').removeAttribute('aria-activedescendant');
+  state.countryFocusIndex = -1;
+}
+
+function setActiveCountryOption(index) {
+  const options = $$('.country-result', $('#countryResults'));
+  if (!options.length) return;
+  state.countryFocusIndex = (index + options.length) % options.length;
+  options.forEach((option, optionIndex) => {
+    const active = optionIndex === state.countryFocusIndex;
+    option.classList.toggle('active', active);
+    option.setAttribute('aria-selected', String(active));
+    if (active) option.scrollIntoView({ block: 'nearest' });
+  });
+  $('#countrySearch').setAttribute('aria-activedescendant', options[state.countryFocusIndex].id);
 }
 
 function addCountry(code) {
@@ -407,8 +454,10 @@ function addCountry(code) {
   $('#selectWorld').classList.remove('active');
   $('#countrySearch').value = '';
   $('#countryResults').classList.remove('open');
+  $('#countrySearch').setAttribute('aria-expanded', 'false');
+  $('#countrySearch').removeAttribute('aria-activedescendant');
   renderSelectedCountries();
-  recalculate();
+  recalculate(true);
 }
 
 function renderSelectedCountries() {
@@ -420,28 +469,58 @@ function renderSelectedCountries() {
   }
   root.innerHTML = state.selectedCountries.map(code => {
     const country = state.countries.find(c => c.code === code) || fallbackCountries.find(c => c.code === code);
-    return `<button type="button" class="selected-chip" data-code="${code}">${country?.name || code}</button>`;
+    const name = country?.name || code;
+    return `<button type="button" class="selected-chip" data-code="${code}" aria-label="Remove ${name}">${name}</button>`;
   }).join('');
 }
 
 function bindEvents() {
   $('#studyForm').addEventListener('submit', event => event.preventDefault());
-  $('#startButton').addEventListener('click', () => $('.question-panel').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  $('#startButton').addEventListener('click', () => {
+    scrollToElement($('.question-panel'));
+    focusElement($('.step.active h2'));
+  });
   $('#nextButton').addEventListener('click', () => state.step === 6
-    ? $('.result-panel').scrollIntoView({ behavior: 'smooth', block: 'start' })
+    ? (scrollToElement($('.result-panel')), focusElement($('#resultsHeading')))
     : showStep(state.step + 1));
-  $('#adjustInputs').addEventListener('click', () => $('.final-step').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  $('#adjustInputs').addEventListener('click', () => {
+    scrollToElement($('.final-step'));
+    focusElement($('.final-step h2'));
+  });
   $('#backButton').addEventListener('click', () => showStep(state.step - 1));
   $('#resetButton').addEventListener('click', resetStudy);
   $('#countrySearch').addEventListener('input', e => renderCountryResults(e.target.value));
+  $('#countrySearch').addEventListener('keydown', event => {
+    const options = $$('.country-result', $('#countryResults'));
+    if (event.key === 'ArrowDown' && options.length) {
+      event.preventDefault();
+      setActiveCountryOption(state.countryFocusIndex + 1);
+    } else if (event.key === 'ArrowUp' && options.length) {
+      event.preventDefault();
+      setActiveCountryOption(state.countryFocusIndex < 0 ? options.length - 1 : state.countryFocusIndex - 1);
+    } else if (event.key === 'Enter' && state.countryFocusIndex >= 0 && options[state.countryFocusIndex]) {
+      event.preventDefault();
+      addCountry(options[state.countryFocusIndex].dataset.code);
+    } else if (event.key === 'Escape') {
+      $('#countryResults').classList.remove('open');
+      $('#countrySearch').setAttribute('aria-expanded', 'false');
+      $('#countrySearch').removeAttribute('aria-activedescendant');
+      state.countryFocusIndex = -1;
+    }
+  });
   $('#countryResults').addEventListener('click', e => {
     const row = e.target.closest('[data-code]'); if (row) addCountry(row.dataset.code);
   });
   $('#selectedCountries').addEventListener('click', e => {
     const chip = e.target.closest('[data-code]');
-    if (chip) { state.selectedCountries = state.selectedCountries.filter(code => code !== chip.dataset.code); renderSelectedCountries(); recalculate(); }
+    if (chip) {
+      state.selectedCountries = state.selectedCountries.filter(code => code !== chip.dataset.code);
+      renderSelectedCountries();
+      recalculate(true);
+      $('#countrySearch').focus();
+    }
   });
-  $('#selectWorld').addEventListener('click', () => { state.selectedCountries = []; renderSelectedCountries(); recalculate(); });
+  $('#selectWorld').addEventListener('click', () => { state.selectedCountries = []; renderSelectedCountries(); recalculate(true); });
   $$('input, select', $('#studyForm')).forEach(input => input.addEventListener('input', () => {
     if (input.matches('[name="religionChoice"], [name="backgroundChoice"]')) normalizeMultiSelect(input);
     if (input.matches('[name="selfGender"], [name="orientation"], [name="partnerGender"]') && state.step <= 2) syncOrientationDefault();
@@ -449,9 +528,9 @@ function bindEvents() {
       state.reciprocalCustomized = true;
       if (state.researchEstimate) renderEstimateEvidence(state.researchEstimate, true);
     }
-    updateOutputs(); recalculate();
+    updateOutputs(); recalculate(true);
   }));
-  $('#restoreEstimate').addEventListener('click', () => { syncOrientationDefault(); recalculate(); });
+  $('#restoreEstimate').addEventListener('click', () => { syncOrientationDefault(); recalculate(true); });
   $('#openMethod').addEventListener('click', () => $('#methodDialog').showModal());
   $('#openAssumptions').addEventListener('click', () => $('#methodDialog').showModal());
   $('.dialog-close').addEventListener('click', () => $('#methodDialog').close());
@@ -473,6 +552,12 @@ function updateOutputs() {
   $('#interactionsOutput').textContent = $('#interactions').value;
   $('#relevanceOutput').textContent = `${$('#relevance').value}%`;
   $('#sparkOutput').textContent = `${$('#spark').value}%`;
+  $('#availability').setAttribute('aria-valuetext', `${$('#availability').value} percent`);
+  $('#orientationRate').setAttribute('aria-valuetext', `${formatEvidencePercent(Number($('#orientationRate').value))} reciprocal dating openness`);
+  $('#income').setAttribute('aria-valuetext', money(Number($('#income').value)));
+  $('#interactions').setAttribute('aria-valuetext', `${$('#interactions').value} new people per week`);
+  $('#relevance').setAttribute('aria-valuetext', `${$('#relevance').value} percent`);
+  $('#spark').setAttribute('aria-valuetext', `${$('#spark').value} percent`);
 }
 
 function resetStudy() {

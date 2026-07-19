@@ -2,7 +2,7 @@
 
 A dependency-free interactive study that estimates the size of a potential partner pool and translates a person's rate of new encounters into 20%, 50%, and 80% probability timelines.
 
-- **Live project:** [grahamhp.github.io/LoveRace](https://grahamhp.github.io/LoveRace/)
+- **Live project:** [raceto.love](https://raceto.love/)
 - **Code repository:** [github.com/grahamhp/LoveRace](https://github.com/grahamhp/LoveRace)
 
 ## Built with Codex and GPT-5.6
@@ -40,6 +40,33 @@ python -m http.server 4173
 Then open [http://localhost:4173](http://localhost:4173).
 
 The app requests current population, country population, and GDP-per-capita data from the World Bank API. Documented fallback values keep the experience working if the API is unavailable or the browser blocks the request.
+
+## Custom domain and deployment
+
+LoveRace is published from the repository's `main` branch through GitHub Pages and uses [raceto.love](https://raceto.love/) as its canonical domain. The root-level `CNAME` file connects the deployment to the custom domain. Porkbun DNS points the apex domain to GitHub Pages, while `www.raceto.love` redirects to the canonical apex address.
+
+The original GitHub Pages address remains the hosting origin, but canonical metadata, the sitemap, structured data, and social-sharing metadata consistently identify `https://raceto.love/` as the preferred public URL.
+
+## Discoverability and accessibility
+
+The project includes the technical foundations needed for search engines, social platforms, browsers, and assistive technology to understand the site:
+
+- A descriptive page title and search snippet
+- Canonical URLs for the home and accessibility pages
+- Open Graph and social-card metadata
+- JSON-LD describing LoveRace as both a website and a free web application
+- `robots.txt` and an XML sitemap using absolute canonical URLs
+- A web app manifest, favicon, Apple touch icon, and custom 404 page
+- Semantic landmarks, headings, fieldsets, labels, and native controls
+- A skip link and strong visible keyboard-focus indicators
+- Keyboard operation for country-search suggestions
+- Focus movement to each new question heading
+- Concise screen-reader status announcements for changing partner-pool and probability results
+- Text equivalents for the visual population display
+- Higher-contrast supporting text and reduced-motion behavior
+- A public [accessibility page](https://raceto.love/accessibility.html) with usage guidance, known limitations, privacy information, and a way to report barriers
+
+The home page was checked through rendered keyboard and interaction tests and achieved Lighthouse scores of 100 for accessibility and 100 for SEO on July 19, 2026. Automated scores are a useful baseline, not a guarantee that every person or assistive-technology combination will encounter no barriers.
 
 ## What the model estimates
 

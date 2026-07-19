@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Accessibility features, known limitations, and support information for LoveRace." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#f5f4ef" />
+  <title>Accessibility | LoveRace</title>
+  <link rel="canonical" href="https://raceto.love/accessibility.html" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="assets/love-race-logo.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="info-page">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand-logo" href="/" aria-label="LoveRace home">
+      <span class="brand-symbol" aria-hidden="true"><img src="assets/love-race-logo.png" alt="" /></span>
+      <span class="brand-word" aria-hidden="true"><img src="assets/love-race-logo.png" alt="" /></span>
+    </a>
+    <div class="header-note">A probability study of human connection</div>
+    <a class="text-button" href="/">Return home</a>
+  </header>
+
+  <main class="info-main" id="main-content" tabindex="-1">
+    <div class="info-kicker">Accessibility / 01</div>
+    <h1>Human connection<br /><em>includes everyone.</em></h1>
+    <p class="info-lede">LoveRace is designed to be understandable and usable across different ways of seeing, hearing, moving, reading, and navigating. We aim toward WCAG 2.2 Level AA and will continue improving the experience as issues are identified.</p>
+
+    <section class="info-section">
+      <h2>What is supported</h2>
+      <ul>
+        <li>Semantic headings, landmarks, labels, fieldsets, and native controls.</li>
+        <li>Keyboard navigation with visible focus indicators.</li>
+        <li>A skip link for moving directly to the main content.</li>
+        <li>Screen-reader announcements that summarize meaningful result changes without reading the full results panel repeatedly.</li>
+        <li>Keyboard operation for the country-search suggestions.</li>
+        <li>Text explanations for the population visualization and probability results.</li>
+        <li>Reduced animation when the device requests reduced motion.</li>
+        <li>Responsive layouts that reflow on smaller screens and at increased zoom.</li>
+      </ul>
+    </section>
+
+    <section class="info-section">
+      <h2>Using the study</h2>
+      <p>Use Tab and Shift+Tab to move through controls. In country search, type a country, use the Up and Down Arrow keys to review suggestions, and press Enter to select one. Each study step moves keyboard focus to its question heading. Result changes are summarized through a polite status message for assistive technology.</p>
+    </section>
+
+    <section class="info-section">
+      <h2>Known limitations</h2>
+      <p>The site has been designed and tested with accessibility in mind, but no automated or manual review can guarantee a barrier-free experience for every person, browser, or assistive-technology combination. The large logo image contains visible words, but it is treated as decorative because the adjacent link has the accessible name “LoveRace home.” The probability model also uses broad categories that cannot represent every identity or life circumstance.</p>
+    </section>
+
+    <section class="info-section">
+      <h2>Your privacy</h2>
+      <p>Your study answers are calculated in your browser. LoveRace does not create an account, save your answers, or send them to an application database. The site requests public population and economic data from the World Bank API.</p>
+    </section>
+
+    <section class="info-section">
+      <h2>Report a barrier</h2>
+      <p>If something is difficult to perceive or operate, please <a href="https://github.com/grahamhp/LoveRace/issues/new">open an accessibility issue on GitHub</a>. Include the page, what you were trying to do, your browser, and any assistive technology used when you are comfortable sharing that information.</p>
+    </section>
+
+    <section class="info-section">
+      <h2>Last reviewed</h2>
+      <p>July 19, 2026</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>LoveRace is an exploratory model, not a prediction.</p>
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="https://github.com/grahamhp/LoveRace" rel="noreferrer">Source code</a>
+    </nav>
+  </footer>
+</body>
+</html>

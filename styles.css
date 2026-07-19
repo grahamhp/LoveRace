@@ -21,6 +21,19 @@ body {
 }
 button, input, select { font: inherit; }
 button { color: inherit; }
+.sr-only {
+  position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important;
+  margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important; border: 0 !important;
+}
+.skip-link {
+  position: fixed; top: 10px; left: 10px; z-index: 100; padding: 12px 16px; color: var(--ink);
+  background: var(--acid); border: 2px solid var(--ink); font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .1em; transform: translateY(-150%); transition: transform .15s var(--ease);
+}
+.skip-link:focus { transform: translateY(0); }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+main:focus { outline: 0; }
 .grain {
   position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: .035;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.85'/%3E%3C/svg%3E");
@@ -38,7 +51,7 @@ button { color: inherit; }
 .brand-word { width: 155px; height: 25px; }
 .brand-word img { position: absolute; width: 201px; max-width: none; transform: translate(-27px, -143px); }
 .header-note { justify-self: center; text-transform: uppercase; font-size: 9px; letter-spacing: .19em; color: var(--muted); }
-.text-button, .quiet-button { border: 0; background: none; padding: 8px 0; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; }
+.text-button, .quiet-button { border: 0; background: none; padding: 8px 0; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; text-decoration: none; }
 .text-button { justify-self: end; }
 .text-button span { color: var(--orange); margin-left: 5px; }
 
@@ -83,6 +96,7 @@ button { color: inherit; }
 .step-deck { font: 17px/1.5 Georgia, serif; max-width: 620px; color: #414039; margin: 23px 0 40px; }
 fieldset { border: 0; padding: 0; margin: 0 0 30px; }
 legend, .field-block > label, .money-head label { font-size: 10px; text-transform: uppercase; letter-spacing: .14em; font-weight: 700; margin-bottom: 12px; display: block; }
+.field-instruction { margin: -5px 0 8px; color: var(--muted); font: italic 11px/1.4 Georgia, serif; }
 
 .search-wrap { display: flex; border-bottom: 1px solid var(--ink); align-items: center; }
 .search-wrap input { width: 100%; border: 0; background: transparent; padding: 13px 2px; outline: 0; font: 24px Georgia, serif; }
@@ -90,7 +104,7 @@ legend, .field-block > label, .money-head label { font-size: 10px; text-transfor
 .country-results { position: absolute; background: var(--paper); border: 1px solid var(--ink); width: min(510px, calc(100vw - 60px)); max-height: 225px; overflow: auto; z-index: 6; display: none; }
 .country-results.open { display: block; }
 .country-result { padding: 12px 15px; display: flex; justify-content: space-between; cursor: pointer; border-bottom: 1px solid var(--line); font-size: 13px; }
-.country-result:hover { background: var(--acid); }
+.country-result:hover, .country-result.active { background: var(--acid); }
 .country-result span:last-child { color: var(--muted); }
 .selection-row { margin-top: 28px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .choice-chip, .selected-chip { border: 1px solid var(--ink); border-radius: 100px; padding: 10px 14px; background: transparent; font-size: 11px; cursor: pointer; }
@@ -106,6 +120,7 @@ legend, .field-block > label, .money-head label { font-size: 10px; text-transfor
 .option-card input, .pill-options input, .large-checks input { position: absolute; opacity: 0; pointer-events: none; }
 .option-card > span { min-height: 74px; padding: 17px; border: 1px solid var(--line); display: flex; flex-direction: column; cursor: pointer; transition: .2s; }
 .option-card input:checked + span { border-color: var(--ink); background: var(--ink); color: white; }
+.option-card input:focus-visible + span, .pill-options input:focus-visible + span { outline: 3px solid var(--blue); outline-offset: 3px; }
 .option-card b, .large-checks b { font-size: 14px; }.option-card small, .large-checks small { margin-top: 5px; color: var(--muted); font: italic 12px Georgia, serif; }
 .option-card input:checked + span small { color: #bbb; }
 .pill-options { display: flex; flex-wrap: wrap; gap: 7px; }
@@ -116,6 +131,7 @@ legend, .field-block > label, .money-head label { font-size: 10px; text-transfor
 .large-checks label { border: 1px solid var(--line); padding: 18px; display: grid; grid-template-columns: 26px 1fr; cursor: pointer; }
 .large-checks .check-mark { width: 17px; height: 17px; border: 1px solid var(--ink); display: grid; place-items: center; color: transparent; font-size: 11px; }
 .large-checks input:checked + .check-mark { background: var(--ink); color: white; }
+.large-checks input:focus-visible + .check-mark { outline: 3px solid var(--blue); outline-offset: 4px; }
 .large-checks label > span:last-child { display: flex; flex-direction: column; }
 
 .inline-setting, .subquestion { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--line); }
@@ -192,7 +208,7 @@ select { width: 100%; border: 0; border-bottom: 1px solid var(--ink); background
 .live-indicator { color: var(--acid); }.live-indicator i { width: 5px; height: 5px; border-radius: 50%; display: inline-block; background: var(--acid); margin-right: 5px; animation: pulse 1.7s infinite; }
 @keyframes pulse { 50% { opacity: .3; } }
 .population-number { font-size: clamp(44px,4.7vw,80px); letter-spacing: -.065em; font-weight: 700; line-height: 1; margin-top: 28px; white-space: nowrap; }
-.uncertainty { color: #888; font: italic 11px Georgia, serif; margin-top: 8px; }
+.uncertainty { color: #aaa; font: italic 11px Georgia, serif; margin-top: 8px; }
 .population-lens {
   min-height: 226px; position: relative; margin: 20px 0 10px; overflow: hidden;
   border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 19px 16px 15px;
@@ -202,28 +218,28 @@ select { width: 100%; border: 0; border-bottom: 1px solid var(--ink); background
   content: ""; position: absolute; width: 7px; height: 7px; right: 16px; top: 17px;
   background: var(--orange); transform: rotate(45deg);
 }
-.ratio-kicker { color: #777; font-size: 8px; text-transform: uppercase; letter-spacing: .14em; }
+.ratio-kicker { color: #aaa; font-size: 8px; text-transform: uppercase; letter-spacing: .14em; }
 .ratio-mark { display: flex; align-items: baseline; gap: 12px; margin-top: 15px; line-height: .8; }
 .ratio-mark span, .ratio-mark b { font-size: clamp(58px, 5.7vw, 92px); letter-spacing: -.075em; font-weight: 680; }
 .ratio-mark i { color: var(--orange); font: italic 43px Georgia, serif; }
 .ratio-copy { width: 230px; color: #aaa; font: italic 11px/1.35 Georgia, serif; margin: 15px 0 18px; }
 .share-meter { height: 3px; width: 100%; background: #343431; overflow: hidden; }
 .share-fill { height: 100%; width: 100%; background: var(--acid); transition: width .65s var(--ease); }
-.share-caption { display: flex; justify-content: space-between; margin-top: 8px; color: #777; font-size: 8px; text-transform: uppercase; letter-spacing: .11em; }
+.share-caption { display: flex; justify-content: space-between; margin-top: 8px; color: #aaa; font-size: 8px; text-transform: uppercase; letter-spacing: .11em; }
 .filter-ledger { font-size: 10px; margin-top: 4px; }
 .ledger-title, .ledger-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; padding: 9px 0; border-bottom: 1px solid #2d2d2b; }
-.ledger-title { color: #777; text-transform: uppercase; letter-spacing: .12em; font-size: 8px; }
+.ledger-title { color: #aaa; text-transform: uppercase; letter-spacing: .12em; font-size: 8px; }
 .ledger-row span:first-child { color: #bbb; }.ledger-row b { color: var(--acid); font-weight: 500; }
-.ledger-empty { color: #666; font: italic 12px Georgia, serif; padding: 20px 0; }
+.ledger-empty { color: #aaa; font: italic 12px Georgia, serif; padding: 20px 0; }
 .odds-panel { display: none; margin-top: 22px; border: 1px solid #3b3b37; padding: 18px; }
 .odds-panel.visible { display: block; }
-.odds-intro { color: #999; font: italic 12px/1.4 Georgia, serif; }
+.odds-intro { color: #aaa; font: italic 12px/1.4 Georgia, serif; }
 .odds-intro span { color: var(--acid); display: block; margin-bottom: 5px; font: 700 8px Helvetica, Arial, sans-serif; letter-spacing: .13em; text-transform: uppercase; }
 .odds-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 15px; }
 .odds-grid > div { border-left: 1px solid #3b3b37; padding: 0 10px; }.odds-grid > div:first-child { border: 0; padding-left: 0; }
 .odds-grid span { color: var(--orange); font: 22px Georgia, serif; display: block; }
-.odds-grid b { display: block; margin-top: 5px; font-size: 15px; }.odds-grid small { color: #777; font-size: 8px; text-transform: uppercase; letter-spacing: .1em; }
-.odds-panel p { color: #777; font-size: 9px; line-height: 1.4; margin: 15px 0 0; }
+.odds-grid b { display: block; margin-top: 5px; font-size: 15px; }.odds-grid small { color: #aaa; font-size: 8px; text-transform: uppercase; letter-spacing: .1em; }
+.odds-panel p { color: #aaa; font-size: 9px; line-height: 1.4; margin: 15px 0 0; }
 .adjust-button { width: 100%; border: 0; border-top: 1px solid #3b3b37; background: transparent; color: var(--paper); margin-top: 15px; padding: 14px 0 0; display: flex; justify-content: space-between; cursor: pointer; font-size: 9px; text-transform: uppercase; letter-spacing: .12em; }
 .adjust-button:hover { color: var(--acid); }
 .assumptions-button { border: 0; border-top: 1px solid #333; background: transparent; color: #aaa; padding: 17px 0 0; margin-top: auto; display: flex; justify-content: space-between; cursor: pointer; font-size: 9px; text-transform: uppercase; letter-spacing: .12em; }
@@ -250,6 +266,27 @@ dialog::backdrop { background: rgba(0,0,0,.74); backdrop-filter: blur(4px); }
 .source-list li { border-top: 1px solid var(--line); padding: 9px 0; display: flex; flex-direction: column; }
 .source-list a { color: inherit; font-family: Helvetica, Arial, sans-serif; font-size: 12px; }.source-list span { color: var(--muted); font-size: 11px; }
 
+.site-footer {
+  min-height: 88px; padding: 24px 34px; border-top: 1px solid var(--line); display: flex;
+  align-items: center; justify-content: space-between; gap: 24px; color: var(--muted); font-size: 11px;
+}
+.site-footer p { margin: 0; font: italic 13px Georgia, serif; }
+.site-footer nav { display: flex; flex-wrap: wrap; gap: 20px; }
+.site-footer a { color: var(--ink); text-underline-offset: 4px; text-decoration-color: var(--orange); }
+
+.info-page { min-height: 100vh; }
+.info-main { width: min(820px, calc(100% - 44px)); margin: 0 auto; padding: clamp(70px, 10vw, 130px) 0; }
+.info-kicker { margin-bottom: 18px; font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+.info-main h1 { margin: 0 0 32px; font-size: clamp(52px, 8vw, 104px); line-height: .88; letter-spacing: -.065em; }
+.info-main h1 em { font-family: Georgia, serif; font-weight: 400; }
+.info-lede { max-width: 680px; margin: 0 0 55px; font: 20px/1.5 Georgia, serif; }
+.info-section { display: grid; grid-template-columns: 175px 1fr; gap: 32px; padding: 28px 0; border-top: 1px solid var(--line); }
+.info-section h2 { margin: 0; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
+.info-section p, .info-section ul { margin: 0; font: 15px/1.65 Georgia, serif; }
+.info-section ul { padding-left: 19px; }
+.info-section a { color: inherit; text-decoration-color: var(--orange); text-underline-offset: 4px; }
+.info-home-button { color: white; text-decoration: none; }
+
 @media (max-width: 980px) {
   .study-shell { grid-template-columns: 1fr; }
   .result-panel { position: relative; height: auto; min-height: 640px; order: -1; }
@@ -269,6 +306,8 @@ dialog::backdrop { background: rgba(0,0,0,.74); backdrop-filter: blur(4px); }
   .estimate-sources { grid-template-columns: 1fr; }.estimate-definition { grid-template-columns: 1fr; gap: 5px; }
   .dialog-content { padding: 30px 22px; }.dialog-content h2 { font-size: 48px; }
   .odds-grid b { font-size: 12px; }
+  .site-footer { align-items: flex-start; flex-direction: column; padding: 24px 20px; }
+  .info-section { grid-template-columns: 1fr; gap: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

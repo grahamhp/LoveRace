@@ -3,33 +3,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A transparent, probabilistic portrait of your potential partner pool." />
+  <meta name="description" content="Explore how geography, demographics, preferences, and new encounters shape the probability of meeting a compatible partner." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="theme-color" content="#f5f4ef" />
   <title>LoveRace: A probability study of human connection</title>
+  <link rel="canonical" href="https://raceto.love/" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="shortcut icon" href="favicon.svg" />
   <link rel="apple-touch-icon" href="assets/love-race-logo.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="LoveRace" />
+  <meta property="og:title" content="LoveRace: A probability study of human connection" />
+  <meta property="og:description" content="Explore how geography, demographics, preferences, and new encounters shape the probability of meeting a compatible partner." />
+  <meta property="og:url" content="https://raceto.love/" />
+  <meta property="og:image" content="https://raceto.love/assets/love-race-logo.png" />
+  <meta property="og:image:width" content="1254" />
+  <meta property="og:image:height" content="1254" />
+  <meta property="og:image:alt" content="LoveRace logo: many dots narrowing toward one bright point" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="LoveRace: A probability study of human connection" />
+  <meta name="twitter:description" content="Explore how geography, demographics, preferences, and new encounters shape the probability of meeting a compatible partner." />
+  <meta name="twitter:image" content="https://raceto.love/assets/love-race-logo.png" />
+  <meta name="twitter:image:alt" content="LoveRace logo: many dots narrowing toward one bright point" />
   <link rel="stylesheet" href="styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://raceto.love/#website",
+        "url": "https://raceto.love/",
+        "name": "LoveRace",
+        "alternateName": "Race to Love",
+        "description": "A probability study of human connection."
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://raceto.love/#application",
+        "url": "https://raceto.love/",
+        "name": "LoveRace",
+        "description": "An interactive probability model that explores how geography, demographics, preferences, and new encounters shape the estimated likelihood of meeting a compatible partner.",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires a modern web browser with JavaScript enabled.",
+        "isAccessibleForFree": true,
+        "image": "https://raceto.love/assets/love-race-logo.png",
+        "author": {
+          "@type": "Person",
+          "name": "Graham Henderson"
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="grain" aria-hidden="true"></div>
   <header class="site-header">
-    <a class="brand-logo" href="#" aria-label="LoveRace home">
+    <a class="brand-logo" href="/" aria-label="LoveRace home">
       <span class="brand-symbol" aria-hidden="true"><img src="assets/love-race-logo.png" alt="" /></span>
       <span class="brand-word" aria-hidden="true"><img src="assets/love-race-logo.png" alt="" /></span>
     </a>
     <div class="header-note">A probability study of human connection</div>
-    <button class="text-button" id="openMethod">Methodology <span>↗</span></button>
+    <button class="text-button" id="openMethod" type="button">Methodology <span aria-hidden="true">↗</span></button>
   </header>
 
-  <main>
+  <main id="main-content" tabindex="-1">
     <section class="intro" id="intro">
       <div class="intro-kicker">One world. Billions of possibilities.</div>
       <h1>How many people<br />could be <em>your person?</em></h1>
       <p class="intro-copy">Begin with everyone. Add what matters. See what changes, and what it might take to actually meet.</p>
-      <button class="start-button" id="startButton">
+      <button class="start-button" id="startButton" type="button">
         <span>Begin the study</span>
-        <span class="button-arrow">↓</span>
+        <span class="button-arrow" aria-hidden="true">↓</span>
       </button>
     </section>
 
@@ -37,8 +86,8 @@
       <div class="question-panel">
         <div class="study-progress-wrap">
           <span id="stepLabel">01 / 07</span>
-          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-          <button class="quiet-button" id="resetButton">Reset</button>
+          <div class="progress-track" id="progressTrack" role="progressbar" aria-label="Study progress" aria-valuemin="1" aria-valuemax="7" aria-valuenow="1"><div class="progress-fill" id="progressFill"></div></div>
+          <button class="quiet-button" id="resetButton" type="button">Reset</button>
         </div>
 
         <form id="studyForm" novalidate>
@@ -48,9 +97,10 @@
             <p class="step-deck">Choose any country you would genuinely date in, travel to, or relocate for. Start broad; you can always change it.</p>
             <div class="field-block">
               <label for="countrySearch">Search countries</label>
+              <p class="field-instruction" id="countryInstructions">Type a country, then use the arrow keys and Enter to select it.</p>
               <div class="search-wrap">
-                <input id="countrySearch" type="search" placeholder="Type a country…" autocomplete="off" />
-                <span>⌕</span>
+                <input id="countrySearch" type="search" placeholder="Type a country…" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="countryResults" aria-expanded="false" aria-describedby="countryInstructions" />
+                <span aria-hidden="true">⌕</span>
               </div>
               <div class="country-results" id="countryResults" role="listbox" aria-label="Country results"></div>
             </div>
@@ -107,7 +157,7 @@
             <div class="inline-setting">
               <div><b>Estimated reciprocal dating openness</b><small>The share of people selected above whose reported orientation and dating preferences could include someone with your identity.</small></div>
               <output id="orientationOutput">94.1%</output>
-              <input id="orientationRate" type="range" min="0.1" max="100" step="0.1" value="94.1" aria-label="Estimated reciprocal dating openness" />
+              <input id="orientationRate" type="range" min="0.1" max="100" step="0.1" value="94.1" aria-label="Estimated reciprocal dating openness" aria-describedby="orientationOutput estimateDefinition" />
             </div>
             <div class="estimate-evidence">
               <div class="estimate-evidence-head">
@@ -117,7 +167,7 @@
               <b id="estimateSummary">About 94 in 100 gender-aligned men report an orientation that could include a gender-aligned woman.</b>
               <p id="estimateBasis">Based on the UK Office for National Statistics 2024 sexual-identity distribution.</p>
               <div class="estimate-breakdown" id="estimateBreakdown"></div>
-              <div class="estimate-definition"><strong>What this number means</strong><span>It removes people whose stated orientation or dating preferences probably would not include someone with your identity. It does not estimate whether they will be attracted to you personally.</span></div>
+              <div class="estimate-definition" id="estimateDefinition"><strong>What this number means</strong><span>It removes people whose stated orientation or dating preferences probably would not include someone with your identity. It does not estimate whether they will be attracted to you personally.</span></div>
               <div class="estimate-sources" id="estimateSources">
                 <a data-source="ons" href="https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2024" target="_blank" rel="noreferrer">ONS 2024 <span>official orientation data ↗</span></a>
                 <a data-source="blair" href="https://doi.org/10.1177/0265407518779139" target="_blank" rel="noreferrer">Blair & Hoskin 2019 <span>dating choices, N=958 ↗</span></a>
@@ -140,8 +190,8 @@
             <p class="field-caveat research-caveat">The current age estimate uses a worldwide age curve, even when countries are selected. Country-specific age structure is not applied yet. <a href="https://population.un.org/wpp/" target="_blank" rel="noreferrer">UN World Population Prospects 2024 ↗</a></p>
             <div class="subquestion">
               <label for="availability">Likely single and open to a relationship</label>
-              <div class="slider-line"><input id="availability" type="range" min="10" max="80" value="38" /><output id="availabilityOutput">38%</output></div>
-              <small>38% is a broad, adjustable starting point, not an age- or country-specific result. Partnership status varies with age, sex, local definitions of marriage and cohabitation, law, economics, and social norms.</small>
+              <div class="slider-line"><input id="availability" type="range" min="10" max="80" value="38" aria-describedby="availabilityOutput availabilityNote" /><output id="availabilityOutput">38%</output></div>
+              <small id="availabilityNote">38% is a broad, adjustable starting point, not an age- or country-specific result. Partnership status varies with age, sex, local definitions of marriage and cohabitation, law, economics, and social norms.</small>
               <div class="research-links"><a href="https://www.un.org/development/desa/pd/node/3593" target="_blank" rel="noreferrer">UN World Marriage Data · age and sex, 232 countries ↗</a><a href="https://www.oecd.org/en/data/datasets/oecd-family-database.html" target="_blank" rel="noreferrer">OECD Family Database · marriage and cohabitation ↗</a></div>
             </div>
           </section>
@@ -193,7 +243,7 @@
             <p class="step-deck">Keep what matters. Leave the rest open. Income is modeled against local economic data when available.</p>
             <div class="money-setting">
               <div class="money-head"><label for="income">Minimum annual income <span>(USD equivalent)</span></label><output id="incomeOutput">No minimum</output></div>
-              <input id="income" type="range" min="0" max="200000" step="5000" value="0" />
+              <input id="income" type="range" min="0" max="200000" step="5000" value="0" aria-describedby="incomeOutput" />
               <div class="range-labels"><span>Open</span><span>$200k+</span></div>
             </div>
             <fieldset>
@@ -221,27 +271,29 @@
             <div class="hero-setting">
               <output id="interactionsOutput">6</output>
               <label for="interactions">new people each week</label>
-              <input id="interactions" type="range" min="1" max="100" value="6" />
+              <input id="interactions" type="range" min="1" max="100" value="6" aria-describedby="interactionsOutput" />
             </div>
             <div class="subquestion">
               <label for="relevance">How many encounters are in the geography you chose?</label>
-              <div class="slider-line"><input id="relevance" type="range" min="5" max="100" value="65" /><output id="relevanceOutput">65%</output></div>
+              <div class="slider-line"><input id="relevance" type="range" min="5" max="100" value="65" aria-describedby="relevanceOutput" /><output id="relevanceOutput">65%</output></div>
             </div>
             <div class="subquestion">
               <label for="spark">Chance of a meaningful mutual connection with an eligible person</label>
-              <div class="slider-line"><input id="spark" type="range" min="1" max="20" value="4" /><output id="sparkOutput">4%</output></div>
-              <small>This is the most personal assumption in the model. Try 2–8% to see a realistic range.</small>
+              <div class="slider-line"><input id="spark" type="range" min="1" max="20" value="4" aria-describedby="sparkOutput sparkNote" /><output id="sparkOutput">4%</output></div>
+              <small id="sparkNote">This is the most personal assumption in the model. Try 2–8% to see a realistic range.</small>
             </div>
           </section>
         </form>
 
         <div class="step-actions">
           <button class="back-button" id="backButton" type="button">← Back</button>
-          <button class="next-button" id="nextButton" type="button"><span>Continue</span><span>→</span></button>
+          <button class="next-button" id="nextButton" type="button"><span>Continue</span><span aria-hidden="true">→</span></button>
         </div>
       </div>
 
-      <aside class="result-panel" aria-live="polite">
+      <aside class="result-panel" aria-labelledby="resultsHeading">
+        <h2 class="sr-only" id="resultsHeading">Live results</h2>
+        <p class="sr-only" id="resultStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         <div class="result-topline">
           <span id="resultContext">Potential people, worldwide</span>
           <span class="live-indicator"><i></i> LIVE ESTIMATE</span>
@@ -262,8 +314,8 @@
           <div class="ledger-empty">Your choices will appear here.</div>
         </div>
 
-        <div class="odds-panel" id="oddsPanel">
-          <div class="odds-intro"><span>Live calculation</span> At your current pace, your estimated chance reaches…</div>
+        <div class="odds-panel" id="oddsPanel" role="region" aria-labelledby="oddsHeading">
+          <div class="odds-intro"><span id="oddsHeading">Live calculation</span> At your current pace, your estimated chance reaches…</div>
           <div class="odds-grid">
             <div><span>20%</span><b id="chance20">...</b><small>from now</small></div>
             <div><span>50%</span><b id="chance50">...</b><small>from now</small></div>
@@ -273,17 +325,25 @@
           <button class="adjust-button" id="adjustInputs" type="button"><span>Adjust weekly inputs</span><span>↓</span></button>
         </div>
 
-        <button class="assumptions-button" id="openAssumptions">View assumptions & sources <span>＋</span></button>
+        <button class="assumptions-button" id="openAssumptions" type="button">View assumptions & sources <span aria-hidden="true">＋</span></button>
       </aside>
     </section>
   </main>
 
-  <dialog id="methodDialog">
+  <footer class="site-footer">
+    <p>LoveRace is an exploratory model, not a prediction.</p>
+    <nav aria-label="Footer">
+      <a href="accessibility.html">Accessibility</a>
+      <a href="https://github.com/grahamhp/LoveRace" rel="noreferrer">Source code</a>
+    </nav>
+  </footer>
+
+  <dialog id="methodDialog" aria-labelledby="methodTitle" aria-describedby="methodLede">
     <div class="dialog-head"><span>THE FINE PRINT / 01</span><button class="dialog-close" aria-label="Close">×</button></div>
     <div class="dialog-content">
       <div class="method-title">
-        <h2>Honest numbers,<br /><em>soft edges.</em></h2>
-        <p class="method-lede"><strong>LoveRace is a what-if model, not a forecast.</strong> The encounter calculation treats new people as independent random draws, although real social circles, dating apps, neighborhoods, workplaces, and repeated encounters are highly clustered. Actively seeking a partner also changes the process through where you go, whom you approach, which platforms you use, and how often you create new opportunities.</p>
+        <h2 id="methodTitle">Honest numbers,<br /><em>soft edges.</em></h2>
+        <p class="method-lede" id="methodLede"><strong>LoveRace is a what-if model, not a forecast.</strong> The encounter calculation treats new people as independent random draws, although real social circles, dating apps, neighborhoods, workplaces, and repeated encounters are highly clustered. Actively seeking a partner also changes the process through where you go, whom you approach, which platforms you use, and how often you create new opportunities.</p>
       </div>
       <div class="method-copy">
         <h3>What is being modeled</h3>
