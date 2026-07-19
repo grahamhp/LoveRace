@@ -109,9 +109,12 @@ legend, .field-block > label, .money-head label { font-size: 10px; text-transfor
 .selection-row { margin-top: 28px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .choice-chip, .selected-chip { border: 1px solid var(--ink); border-radius: 100px; padding: 10px 14px; background: transparent; font-size: 11px; cursor: pointer; }
 .choice-chip.active { background: var(--ink); color: white; }
+.selected-chip { background: var(--ink); color: white; }
+.selected-chip:hover { background: var(--orange); border-color: var(--orange); }
 .selection-or, .empty-selection { color: var(--muted); font: italic 13px Georgia, serif; }
 .selected-countries { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
 .selected-chip::after { content: " ×"; color: var(--orange); }
+.selected-chip:hover::after { color: white; }
 .data-note { border-top: 1px solid var(--line); margin-top: 32px; padding-top: 15px; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .confidence { display: inline-block; padding: 3px 7px; color: var(--ink); margin-right: 6px; text-transform: uppercase; letter-spacing: .1em; font-size: 8px; background: var(--acid); }
 .confidence.medium { background: #ffdc77; }.confidence.low { background: #ffb3a7; }
