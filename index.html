@@ -17,15 +17,15 @@
   <meta property="og:title" content="LoveRace: A probability study of human connection" />
   <meta property="og:description" content="Explore how geography, demographics, preferences, and new encounters shape the probability of meeting a compatible partner." />
   <meta property="og:url" content="https://raceto.love/" />
-  <meta property="og:image" content="https://raceto.love/assets/love-race-logo.png" />
-  <meta property="og:image:width" content="1254" />
-  <meta property="og:image:height" content="1254" />
-  <meta property="og:image:alt" content="LoveRace logo: many dots narrowing toward one bright point" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content="https://raceto.love/assets/social-preview.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="LoveRace asks: How many people could be your person?" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="LoveRace: A probability study of human connection" />
   <meta name="twitter:description" content="Explore how geography, demographics, preferences, and new encounters shape the probability of meeting a compatible partner." />
-  <meta name="twitter:image" content="https://raceto.love/assets/love-race-logo.png" />
-  <meta name="twitter:image:alt" content="LoveRace logo: many dots narrowing toward one bright point" />
+  <meta name="twitter:image" content="https://raceto.love/assets/social-preview.png" />
+  <meta name="twitter:image:alt" content="LoveRace asks: How many people could be your person?" />
   <link rel="stylesheet" href="styles.css" />
   <script type="application/ld+json">
   {
@@ -323,6 +323,7 @@
           </div>
           <p id="oddsFootnote"></p>
           <button class="adjust-button" id="adjustInputs" type="button"><span>Adjust weekly inputs</span><span>↓</span></button>
+          <button class="share-result-button" id="openShare" type="button"><span>Share your result</span><span aria-hidden="true">↗</span></button>
         </div>
 
         <button class="assumptions-button" id="openAssumptions" type="button">View assumptions & sources <span aria-hidden="true">＋</span></button>
@@ -337,6 +338,37 @@
       <a href="https://github.com/grahamhp/LoveRace" rel="noreferrer">Source code</a>
     </nav>
   </footer>
+
+  <dialog class="share-dialog" id="shareDialog" aria-labelledby="shareTitle" aria-describedby="shareDescription">
+    <div class="dialog-head"><span>YOUR RESULT / READY TO SHARE</span><button class="dialog-close" id="closeShare" type="button" aria-label="Close share dialog">×</button></div>
+    <div class="share-dialog-content">
+      <figure class="share-preview-wrap">
+        <canvas id="shareCanvas" width="1080" height="1350" role="img" aria-label="A LoveRace result card showing your estimated partner pool and probability milestones"></canvas>
+        <figcaption>Your personal selections are not shown on the card.</figcaption>
+      </figure>
+      <div class="share-controls">
+        <div class="eyebrow">Turn probability into conversation</div>
+        <h2 id="shareTitle">Put your odds<br /><em>into the world.</em></h2>
+        <p id="shareDescription">Share a portrait result card through an app on your device, or download it for any social platform. The card includes your modeled pool and timeline, but not your gender, orientation, religion, background, income preferences, or country selections.</p>
+        <button class="share-primary" id="nativeShare" type="button"><span>Choose an app</span><span aria-hidden="true">↗</span></button>
+        <div class="share-secondary">
+          <button id="downloadShare" type="button">Download image</button>
+          <button id="copyShare" type="button">Copy result and link</button>
+        </div>
+        <div class="share-quick-links" aria-labelledby="quickShareLabel">
+          <span id="quickShareLabel">Quick link sharing</span>
+          <div>
+            <a id="shareWhatsApp" href="#" target="_blank" rel="noreferrer">WhatsApp</a>
+            <a id="shareFacebook" href="#" target="_blank" rel="noreferrer">Facebook</a>
+            <a id="shareX" href="#" target="_blank" rel="noreferrer">X</a>
+            <a id="shareEmail" href="#">Email</a>
+          </div>
+        </div>
+        <p class="share-note">App availability depends on your device. Quick links share the website and result text; use “Choose an app” or download the image to include the card.</p>
+        <p class="share-status" id="shareStatus" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </dialog>
 
   <dialog id="methodDialog" aria-labelledby="methodTitle" aria-describedby="methodLede">
     <div class="dialog-head"><span>THE FINE PRINT / 01</span><button class="dialog-close" aria-label="Close">×</button></div>

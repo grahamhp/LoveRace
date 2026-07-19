@@ -35,7 +35,10 @@ const state = {
 const fmt = new Intl.NumberFormat('en-US');
 const compactFmt = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 });
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const SHARE_URL = 'https://raceto.love/';
 let resultAnnouncementTimer;
+let shareRenderToken = 0;
+const shareImages = new Map();
 
 function scrollToElement(element, block = 'start') {
   element.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block });
@@ -343,6 +346,9 @@ function renderOdds(model) {
     $(`#chance${target}`).textContent = formatDuration(weeks);
   });
   $('#oddsFootnote').textContent = `${interactions} new people/week · ${(eligibleShare*100).toFixed(eligibleShare < .01 ? 3 : 1)}% meet modeled filters · ${Math.round(relevance*100)}% locally relevant · ${Math.round(spark*100)}% connection assumption. Encounters are treated as independent.`;
+  if ($('#shareDialog').open) renderShareCard().catch(() => {
+    $('#shareStatus').textContent = 'The preview could not be updated. Close and reopen sharing to try again.';
+  });
 }
 
 function formatDuration(weeks) {
@@ -361,6 +367,227 @@ function formatRatio(ratio) {
   if (ratio < 10) return ratio.toFixed(ratio < 2 ? 1 : 0);
   if (ratio < 1000) return fmt.format(Math.round(ratio));
   return compactFmt.format(ratio);
+}
+
+function shareSnapshot() {
+  const model = calculateModel();
+  const ratio = model.product > 0 ? 1 / model.product : Infinity;
+  return {
+    pool: model.pool,
+    poolShort: compactFmt.format(model.pool),
+    ratio: formatRatio(ratio),
+    chance20: $('#chance20').textContent,
+    chance50: $('#chance50').textContent,
+    chance80: $('#chance80').textContent,
+    interactions: Number($('#interactions').value),
+  };
+}
+
+function shareText(snapshot = shareSnapshot()) {
+  return `My LoveRace estimate found ${snapshot.poolShort} potential people. At ${snapshot.interactions} new people a week, the model reaches a 50% chance in ${snapshot.chance50}. Run your own probability study: ${SHARE_URL}`;
+}
+
+function loadShareImage(src) {
+  if (shareImages.has(src)) return shareImages.get(src);
+  const promise = new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = src;
+  });
+  shareImages.set(src, promise);
+  return promise;
+}
+
+function fitCanvasText(context, text, maxWidth, startSize, minimumSize, family = 'Arial', weight = 700) {
+  let size = startSize;
+  do {
+    context.font = `${weight} ${size}px ${family}`;
+    if (context.measureText(text).width <= maxWidth) return size;
+    size -= 2;
+  } while (size > minimumSize);
+  return minimumSize;
+}
+
+function drawTrackingText(context, text, x, y, spacing = 5) {
+  let cursor = x;
+  [...text].forEach(character => {
+    context.fillText(character, cursor, y);
+    cursor += context.measureText(character).width + spacing;
+  });
+}
+
+async function renderShareCard() {
+  const canvas = $('#shareCanvas');
+  const context = canvas.getContext('2d');
+  const snapshot = shareSnapshot();
+  const token = ++shareRenderToken;
+  const [logo, qr] = await Promise.all([
+    loadShareImage('assets/love-race-logo.png'),
+    loadShareImage('assets/share-qr.png'),
+  ]);
+  if (token !== shareRenderToken) return canvas;
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = '#f8f6f1';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  context.drawImage(logo, 135, 865, 1000, 180, 68, 58, 390, 70);
+  context.fillStyle = '#68675f';
+  context.font = '700 14px Arial';
+  drawTrackingText(context, 'A PROBABILITY STUDY OF HUMAN CONNECTION', 578, 94, 1.8);
+  context.fillStyle = 'rgba(17,17,15,.22)';
+  context.fillRect(68, 157, 944, 2);
+
+  const dotColors = ['#ff583d', '#11110f', '#11110f', '#11110f', '#11110f', '#d8ff3e'];
+  dotColors.forEach((color, index) => {
+    context.beginPath();
+    context.fillStyle = color;
+    context.arc(75 + index * 34, 220 + index * 18, index === 5 ? 10 : 7, 0, Math.PI * 2);
+    context.fill();
+  });
+
+  context.fillStyle = '#11110f';
+  context.font = '700 18px Arial';
+  drawTrackingText(context, 'MY MODELED PARTNER POOL', 68, 315, 4.2);
+
+  const poolLabel = snapshot.poolShort.toUpperCase();
+  const poolSize = fitCanvasText(context, poolLabel, 940, 230, 118, 'Arial', 760);
+  context.font = `760 ${poolSize}px Arial`;
+  context.letterSpacing = '-8px';
+  context.fillText(poolLabel, 58, 525);
+  context.letterSpacing = '0px';
+
+  context.fillStyle = '#ff583d';
+  context.font = 'italic 48px Georgia';
+  context.fillText('potential people', 72, 590);
+  context.fillStyle = '#68675f';
+  context.font = '24px Georgia';
+  context.fillText(`${fmt.format(snapshot.pool)} in this scenario`, 72, 642);
+  context.fillStyle = '#11110f';
+  context.font = '700 22px Arial';
+  context.fillText(snapshot.ratio === '1' ? 'BEFORE FILTERING, EVERYONE IS INCLUDED.' : `ABOUT 1 IN ${snapshot.ratio} PEOPLE MEETS THE MODELED FILTERS.`, 72, 698);
+
+  context.fillStyle = '#11110f';
+  context.fillRect(0, 758, 1080, 592);
+  context.fillStyle = '#d8ff3e';
+  context.fillRect(0, 758, 16, 592);
+  context.font = '700 17px Arial';
+  drawTrackingText(context, `AT ${snapshot.interactions} NEW PEOPLE EACH WEEK`, 72, 825, 3.5);
+  context.fillStyle = '#f8f6f1';
+  context.font = 'italic 39px Georgia';
+  context.fillText('The estimated chance reaches…', 72, 883);
+
+  const milestones = [
+    ['20%', snapshot.chance20],
+    ['50%', snapshot.chance50],
+    ['80%', snapshot.chance80],
+  ];
+  milestones.forEach(([chance, duration], index) => {
+    const x = 72 + index * 312;
+    if (index) {
+      context.fillStyle = '#383834';
+      context.fillRect(x - 25, 930, 2, 155);
+    }
+    context.fillStyle = '#ff583d';
+    context.font = '400 58px Georgia';
+    context.fillText(chance, x, 990);
+    context.fillStyle = '#f8f6f1';
+    fitCanvasText(context, duration, 260, 42, 26, 'Arial', 700);
+    context.fillText(duration, x, 1047);
+    context.fillStyle = '#9f9f98';
+    context.font = '700 15px Arial';
+    drawTrackingText(context, 'FROM NOW', x, 1081, 2.5);
+  });
+
+  context.fillStyle = '#383834';
+  context.fillRect(72, 1134, 936, 2);
+  context.drawImage(qr, 834, 1162, 150, 150);
+  context.fillStyle = '#f8f6f1';
+  context.font = '700 30px Arial';
+  context.fillText('RACETO.LOVE', 72, 1205);
+  context.fillStyle = '#9f9f98';
+  context.font = '18px Georgia';
+  context.fillText('Run your own probability study.', 72, 1243);
+  context.font = '15px Arial';
+  context.fillText('Exploratory model, not a prediction.', 72, 1287);
+  context.fillText('Scan to begin', 834, 1330);
+
+  canvas.setAttribute('aria-label', `LoveRace result card. Estimated partner pool: ${fmt.format(snapshot.pool)} people. Twenty percent chance in ${snapshot.chance20}, 50 percent in ${snapshot.chance50}, and 80 percent in ${snapshot.chance80}.`);
+  updateShareLinks(snapshot);
+  return canvas;
+}
+
+function updateShareLinks(snapshot = shareSnapshot()) {
+  const text = shareText(snapshot);
+  $('#shareWhatsApp').href = `https://wa.me/?text=${encodeURIComponent(text)}`;
+  $('#shareFacebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}&quote=${encodeURIComponent(text)}`;
+  $('#shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+  $('#shareEmail').href = `mailto:?subject=${encodeURIComponent('My LoveRace result')}&body=${encodeURIComponent(text)}`;
+}
+
+function shareCanvasBlob() {
+  return new Promise((resolve, reject) => {
+    $('#shareCanvas').toBlob(blob => blob ? resolve(blob) : reject(new Error('Could not create result image.')), 'image/png');
+  });
+}
+
+async function downloadShareCard() {
+  $('#shareStatus').textContent = 'Preparing your image…';
+  await renderShareCard();
+  const blob = await shareCanvasBlob();
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'my-loverace-result.png';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  $('#shareStatus').textContent = 'Image downloaded.';
+}
+
+async function copyShareText() {
+  const text = shareText();
+  let copied = false;
+  try {
+    await navigator.clipboard.writeText(text);
+    copied = true;
+  } catch (error) {
+    const field = document.createElement('textarea');
+    field.value = text;
+    field.setAttribute('readonly', '');
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    document.body.appendChild(field);
+    field.select();
+    copied = document.execCommand('copy');
+    field.remove();
+  }
+  if (!copied) throw new Error('Clipboard access was not available.');
+  $('#shareStatus').textContent = 'Result and link copied.';
+}
+
+async function nativeShareCard() {
+  $('#shareStatus').textContent = 'Preparing your card…';
+  await renderShareCard();
+  const blob = await shareCanvasBlob();
+  const file = new File([blob], 'my-loverace-result.png', { type: 'image/png' });
+  const text = shareText();
+  try {
+    if (navigator.share && navigator.canShare?.({ files: [file] })) {
+      await navigator.share({ title: 'My LoveRace result', text, files: [file] });
+      $('#shareStatus').textContent = 'Card shared.';
+    } else if (navigator.share) {
+      await navigator.share({ title: 'My LoveRace result', text, url: SHARE_URL });
+      $('#shareStatus').textContent = 'Link shared. Download the image to attach the card.';
+    } else {
+      await downloadShareCard();
+      $('#shareStatus').textContent = 'Your browser cannot open an app chooser, so the card was downloaded.';
+    }
+  } catch (error) {
+    $('#shareStatus').textContent = error.name === 'AbortError' ? 'Sharing canceled.' : 'Sharing was not available. Try downloading the image.';
+  }
 }
 
 function money(value) {
@@ -487,6 +714,27 @@ function bindEvents() {
     scrollToElement($('.final-step'));
     focusElement($('.final-step h2'));
   });
+  $('#openShare').addEventListener('click', async () => {
+    $('#shareStatus').textContent = 'Preparing your card…';
+    $('#shareDialog').showModal();
+    $('#shareDialog').scrollTop = 0;
+    try {
+      await renderShareCard();
+      $('#shareStatus').textContent = '';
+    } catch (error) {
+      console.error('Could not render the sharing card.', error);
+      $('#shareStatus').textContent = 'The preview could not be prepared. Please try again.';
+    }
+  });
+  $('#nativeShare').addEventListener('click', nativeShareCard);
+  $('#downloadShare').addEventListener('click', () => downloadShareCard().catch(() => {
+    $('#shareStatus').textContent = 'The image could not be downloaded. Please try again.';
+  }));
+  $('#copyShare').addEventListener('click', () => copyShareText().catch(() => {
+    $('#shareStatus').textContent = 'Copying was not available. Try one of the quick sharing links.';
+  }));
+  $('#closeShare').addEventListener('click', () => $('#shareDialog').close());
+  $('#shareDialog').addEventListener('click', event => { if (event.target === $('#shareDialog')) $('#shareDialog').close(); });
   $('#backButton').addEventListener('click', () => showStep(state.step - 1));
   $('#resetButton').addEventListener('click', resetStudy);
   $('#countrySearch').addEventListener('input', e => renderCountryResults(e.target.value));
@@ -533,7 +781,7 @@ function bindEvents() {
   $('#restoreEstimate').addEventListener('click', () => { syncOrientationDefault(); recalculate(true); });
   $('#openMethod').addEventListener('click', () => $('#methodDialog').showModal());
   $('#openAssumptions').addEventListener('click', () => $('#methodDialog').showModal());
-  $('.dialog-close').addEventListener('click', () => $('#methodDialog').close());
+  $('#methodDialog .dialog-close').addEventListener('click', () => $('#methodDialog').close());
   $('#methodDialog').addEventListener('click', e => { if (e.target === $('#methodDialog')) $('#methodDialog').close(); });
 }
 

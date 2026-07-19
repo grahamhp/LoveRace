@@ -16,7 +16,7 @@ Codex and GPT-5.6 were used to:
 - **Develop the probability model:** translate the concept into a series of population filters, an eligible-share estimate, weekly encounter probability, and 20%, 50%, and 80% cumulative probability timelines.
 - **Research and qualify the data:** identify relevant World Bank, UN, OECD, Pew Research Center, UK ONS, peer-reviewed, and survey sources; distinguish direct measurements from proxies; and label low-confidence assumptions honestly.
 - **Interrogate the methodology:** identify limitations such as correlated demographic variables, geographically uneven evidence, clustered social networks, repeated encounters, and the difference between identity, attraction, dating openness, and compatibility.
-- **Build the application:** write the dependency-free HTML, CSS, and JavaScript; integrate live World Bank API requests and documented fallback values; implement responsive layouts, editable inputs, multi-select controls, and continuously updating calculations.
+- **Build the application:** write the dependency-free HTML, CSS, and JavaScript; integrate live World Bank API requests and documented fallback values; implement responsive layouts, editable inputs, multi-select controls, continuously updating calculations, and client-side social result cards.
 - **Refine the experience through visual testing:** inspect the running site in the browser, respond to screenshots and usability feedback, replace an unclear population graphic, rebalance the methodology page, and verify the final responsive presentation.
 - **Support product iteration:** separate gender-aligned and trans identity options, redefine the unclear "mutual orientation estimate" as reciprocal dating openness, make research assumptions visible and adjustable, and allow users to revise encounter inputs without restarting the study.
 - **Create and deploy the public project:** organize the Git repository, write the technical and methodological documentation, configure GitHub Pages, monitor deployment, and verify the live site and branding assets.
@@ -54,6 +54,7 @@ The project includes the technical foundations needed for search engines, social
 - A descriptive page title and search snippet
 - Canonical URLs for the home and accessibility pages
 - Open Graph and social-card metadata
+- A privacy-conscious 1080 × 1350 result-card generator with native app sharing, image download, copyable result text, quick sharing links, and a scannable link back to the study
 - JSON-LD describing LoveRace as both a website and a free web application
 - `robots.txt` and an XML sitemap using absolute canonical URLs
 - A web app manifest, favicon, Apple touch icon, and custom 404 page
