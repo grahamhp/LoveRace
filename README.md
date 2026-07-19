@@ -2,6 +2,31 @@
 
 A dependency-free interactive study that estimates the size of a potential partner pool and translates a person's rate of new encounters into 20%, 50%, and 80% probability timelines.
 
+- **Live project:** [grahamhp.github.io/LoveRace](https://grahamhp.github.io/LoveRace/)
+- **Code repository:** [github.com/grahamhp/LoveRace](https://github.com/grahamhp/LoveRace)
+
+## Built with Codex and GPT-5.6
+
+LoveRace was created through an iterative collaboration between Graham Henderson and OpenAI Codex, powered by GPT-5.6. Graham brought the original concept, product judgment, lived questions, visual direction, and final editorial decisions. Codex helped turn an idea that had previously been difficult to realize in Excel into a researched, working, publicly available web application.
+
+This was not a one-prompt website. Graham repeatedly tested the application, challenged unclear assumptions, shared screenshots, and asked for revisions. GPT-5.6 helped reason across statistics, research quality, interface design, language, and implementation, while Graham decided what the product should communicate and which tradeoffs were acceptable.
+
+Codex and GPT-5.6 were used to:
+
+- **Develop the probability model:** translate the concept into a series of population filters, an eligible-share estimate, weekly encounter probability, and 20%, 50%, and 80% cumulative probability timelines.
+- **Research and qualify the data:** identify relevant World Bank, UN, OECD, Pew Research Center, UK ONS, peer-reviewed, and survey sources; distinguish direct measurements from proxies; and label low-confidence assumptions honestly.
+- **Interrogate the methodology:** identify limitations such as correlated demographic variables, geographically uneven evidence, clustered social networks, repeated encounters, and the difference between identity, attraction, dating openness, and compatibility.
+- **Build the application:** write the dependency-free HTML, CSS, and JavaScript; integrate live World Bank API requests and documented fallback values; implement responsive layouts, editable inputs, multi-select controls, and continuously updating calculations.
+- **Refine the experience through visual testing:** inspect the running site in the browser, respond to screenshots and usability feedback, replace an unclear population graphic, rebalance the methodology page, and verify the final responsive presentation.
+- **Support product iteration:** separate gender-aligned and trans identity options, redefine the unclear "mutual orientation estimate" as reciprocal dating openness, make research assumptions visible and adjustable, and allow users to revise encounter inputs without restarting the study.
+- **Create and deploy the public project:** organize the Git repository, write the technical and methodological documentation, configure GitHub Pages, monitor deployment, and verify the live site and branding assets.
+
+One representative collaboration involved reciprocal dating openness. Graham challenged an early broad estimate and asked a concrete question: if a trans woman is looking for gender-aligned men, what share might actually include her in their dating pool? GPT-5.6 helped locate and compare relevant evidence, derive a clearly labeled low-confidence proxy, connect it to the appropriate user and partner identities, and rewrite the interface so the estimate and its source were understandable. Graham reviewed the result and guided how it should be framed.
+
+Another example involved the site's original population visualization. Graham found the colored-circle graphic creative but difficult to interpret. Codex helped reconceptualize it as an "Equivalent population density" display with a clearer 1-in-X explanation, a proportion bar, and a filter ledger while preserving the site's fashion-editorial and modern-art aesthetic.
+
+The result reflects a human-led, AI-assisted process. Codex and GPT-5.6 expanded what was technically and analytically possible, but the project's purpose, critiques, revisions, and final choices remained directed by Graham.
+
 ## Open the project
 
 You can double-click `index.html` and open it directly in a browser. The HTML, CSS, and JavaScript do not need to be compiled or installed.
