@@ -20,7 +20,7 @@ The app requests current population, country population, and GDP-per-capita data
 
 LoveRace begins with the population of the whole world or the countries a user selects. Each answer narrows that population using an estimated demographic or preference share. The final step combines the remaining population share with the number of new people the user meets each week, the share of encounters occurring in the selected geography, and an adjustable mutual-connection assumption.
 
-The output is an exploratory estimate—not a prediction that a particular relationship will occur by a particular date. It is designed to make assumptions visible and adjustable.
+The output is an exploratory estimate, not a prediction that a particular relationship will occur by a particular date. It is designed to make assumptions visible and adjustable.
 
 ## Calculation
 
@@ -44,10 +44,10 @@ The 20%, 50%, and 80% timelines solve the final equation for `n`. Encounters are
 ## How the inputs are modeled
 
 - **Population and geography:** live World Bank population totals are used when available. The world total is projected forward between releases using a small annual-growth assumption.
-- **Gender mix:** the selected partner categories are assigned broad population shares. Worldwide data separating cis, trans, and nonbinary populations are incomplete, so these values are model assumptions rather than precise global counts.
+- **Gender mix:** the selected partner categories are assigned broad population shares. Worldwide data separating gender-aligned, trans, and nonbinary populations are incomplete, so these values are model assumptions rather than precise global counts.
 - **Reciprocal dating openness:** the model estimates the share of the selected partner group whose reported orientation or dating choices could include someone with the user's identity. This is not an estimate of personal attraction.
-- **Age:** broad global age bands are smoothed from UN population distributions.
-- **Relationship availability:** the proportion likely to be single and open to a relationship is adjustable because it varies substantially by age, location, and social setting.
+- **Age:** broad global age bands are smoothed from UN population distributions. The current model continues to use this worldwide curve when countries are selected; it does not yet substitute each country's age structure.
+- **Relationship availability:** the proportion likely to be single and open to a relationship is an adjustable 38% starting assumption, not an age- or country-specific estimate. [UN World Marriage Data](https://www.un.org/development/desa/pd/node/3593) shows marital status by age and sex across 232 countries or areas, while the [OECD Family Database](https://www.oecd.org/en/data/datasets/oecd-family-database.html) documents differences in marriage, divorce, cohabitation, and partnership definitions.
 - **Religion and background:** religion uses broad global shares; cultural-background categories are coarse regional proxies and do not represent a complete ethnicity census.
 - **Income:** the selected minimum is modeled against GDP per capita for the chosen geography using a broad income-distribution approximation.
 - **Lifestyle and family preferences:** these use adjustable population-wide proxies rather than individualized survey estimates.
@@ -57,8 +57,8 @@ The 20%, 50%, and 80% timelines solve the final equation for `n`. Encounters are
 
 No single high-quality global dataset measures every combination of gender identity, sexual orientation, and willingness to date. LoveRace therefore uses an evidence hierarchy and labels weaker estimates as limited evidence:
 
-- Cis-pair orientation baselines use the sex-specific sexual-identity distribution published by the UK Office for National Statistics. UK data are a proxy for places without comparable statistics.
-- Estimates involving a trans user and cis potential partners draw on Blair and Hoskin's stated dating-choice study and are combined with ONS orientation shares. For example, the 2.6% trans-woman/cis-men default is a derived, low-confidence proxy—not a directly measured worldwide rate.
+- Gender-aligned pair orientation baselines use the sex-specific sexual-identity distribution published by the UK Office for National Statistics. UK data are a proxy for places without comparable statistics.
+- Estimates involving a trans user and gender-aligned potential partners draw on Blair and Hoskin's stated dating-choice study and are combined with ONS orientation shares. For example, the 2.6% trans-woman/gender-aligned-men default is a derived, low-confidence proxy, not a directly measured worldwide rate.
 - When the selected potential partner is trans, the model uses the orientation distribution in the 2015 U.S. Transgender Survey as a proxy. Orientation can indicate who may be included in a dating pool, but it does not directly measure dating willingness.
 - Every research default remains adjustable so users can test a different social or geographic context.
 
@@ -68,8 +68,10 @@ No single high-quality global dataset measures every combination of gender ident
 | --- | --- | --- |
 | [World Bank population totals](https://data.worldbank.org/indicator/SP.POP.TOTL) | World and country populations | Live API with documented fallbacks |
 | [UN World Population Prospects 2024](https://population.un.org/wpp/) | Broad age and sex distributions | Smoothed into model-friendly age bands |
+| [UN World Marriage Data 2019](https://www.un.org/development/desa/pd/node/3593) | Context for relationship availability by age and sex | Marital status is not identical to being single and open to dating |
+| [OECD Family Database](https://www.oecd.org/en/data/datasets/oecd-family-database.html) | Marriage, divorce, cohabitation, and partnership context | OECD coverage is not worldwide; definitions differ across societies |
 | [Pew Research Center global religion estimates](https://www.pewresearch.org/religion/2025/06/09/how-the-global-religious-landscape-changed-from-2010-to-2020/) | Religion shares | Global categories hide substantial regional variation |
-| [UK ONS, Sexual orientation, 2024](https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2024) | Cis-pair orientation baselines | Official UK proxy; sexual identity is not identical to attraction or behavior |
+| [UK ONS, Sexual orientation, 2024](https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2024) | Gender-aligned pair orientation baselines | Official UK proxy; sexual identity is not identical to attraction or behavior |
 | [Blair & Hoskin, *Transgender exclusion from the world of dating*](https://doi.org/10.1177/0265407518779139) | Stated willingness to date trans people | N=958; predominantly Canadian and American; mean age 25.5 |
 | [2015 U.S. Transgender Survey](https://transequality.org/sites/default/files/docs/usts/USTS-Full-Report-Dec17.pdf) | Trans respondents' orientation distribution | N=27,715; large U.S. convenience sample, not a direct dating-willingness measure |
 | [World Bank GDP per capita](https://data.worldbank.org/indicator/NY.GDP.PCAP.CD) | Income-model calibration | GDP per capita is not the same as an individual's income |

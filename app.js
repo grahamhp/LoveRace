@@ -4,18 +4,18 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const FALLBACK_WORLD = 8_141_808_945;
 const ANNUAL_GROWTH = 0.0085;
 const GENDER_SHARES = Object.freeze({
-  cisWomen: .4895,
+  alignedWomen: .4895,
   transWomen: .0035,
-  cisMen: .4915,
+  alignedMen: .4915,
   transMen: .0035,
   nonbinary: .012,
 });
 const SELF_LABELS = Object.freeze({
-  cisWoman: 'cis woman', transWoman: 'trans woman', cisMan: 'cis man', transMan: 'trans man',
+  alignedWoman: 'gender-aligned woman', transWoman: 'trans woman', alignedMan: 'gender-aligned man', transMan: 'trans man',
   nonbinary: 'nonbinary person', skip: 'person whose gender was not provided',
 });
 const PARTNER_LABELS = Object.freeze({
-  cisWomen: 'cis women', transWomen: 'trans women', cisMen: 'cis men', transMen: 'trans men', nonbinary: 'nonbinary people',
+  alignedWomen: 'gender-aligned women', transWomen: 'trans women', alignedMen: 'gender-aligned men', transMen: 'trans men', nonbinary: 'nonbinary people',
 });
 const state = {
   step: 0,
@@ -109,6 +109,36 @@ function genderFactor() {
   return Math.min(1, genders.reduce((sum, gender) => sum + (GENDER_SHARES[gender] || 0), 0));
 }
 
+function multiSelectFactor(name) {
+  const choices = $$(`input[name="${name}"]:checked`);
+  if (!choices.length || choices.some(input => input.dataset.any === 'true')) return 1;
+  return Math.min(1, choices.reduce((sum, input) => sum + Number(input.value), 0));
+}
+
+function multiSelectLabel(name, fallback, noun) {
+  const choices = $$(`input[name="${name}"]:checked`);
+  if (!choices.length || choices.some(input => input.dataset.any === 'true')) return fallback;
+  const labels = choices.map(input => input.dataset.label);
+  return labels.length <= 2 ? labels.join(' + ') : `${labels.length} ${noun} selected`;
+}
+
+function normalizeMultiSelect(input) {
+  const choices = $$(`input[name="${input.name}"]`);
+  const anyChoice = choices.find(choice => choice.dataset.any === 'true');
+  if (input.dataset.any === 'true' && input.checked) {
+    choices.forEach(choice => { if (choice !== input) choice.checked = false; });
+  } else if (input.checked && anyChoice) {
+    anyChoice.checked = false;
+  }
+  if (!choices.some(choice => choice.checked) && anyChoice) anyChoice.checked = true;
+  updateMultiSelectSummaries();
+}
+
+function updateMultiSelectSummaries() {
+  $('#religionSummary').textContent = multiSelectLabel('religionChoice', 'Open to any religion or worldview', 'religions');
+  $('#backgroundSummary').textContent = multiSelectLabel('backgroundChoice', 'Open to any background', 'backgrounds');
+}
+
 function reciprocalEstimate() {
   const self = selectedValue('selfGender');
   const partners = checkedValues('partnerGender');
@@ -145,11 +175,11 @@ function reciprocalEstimate() {
 function pairOpenness(self, partner) {
   if (self === 'skip') return { rate: .50, sources: ['ons','blair','usts'], confidence: 'low' };
 
-  const selfIsWoman = self === 'cisWoman' || self === 'transWoman';
-  const selfIsMan = self === 'cisMan' || self === 'transMan';
+  const selfIsWoman = self === 'alignedWoman' || self === 'transWoman';
+  const selfIsMan = self === 'alignedMan' || self === 'transMan';
   const selfIsTrans = self === 'transWoman' || self === 'transMan';
-  const partnerIsWoman = partner === 'cisWomen' || partner === 'transWomen';
-  const partnerIsMan = partner === 'cisMen' || partner === 'transMen';
+  const partnerIsWoman = partner === 'alignedWomen' || partner === 'transWomen';
+  const partnerIsMan = partner === 'alignedMen' || partner === 'transMen';
   const partnerIsTrans = partner === 'transWomen' || partner === 'transMen';
 
   if (partner === 'nonbinary') {
@@ -164,21 +194,21 @@ function pairOpenness(self, partner) {
 
   if (selfIsTrans) {
     const rates = {
-      transWoman: { cisWomen: .017, cisMen: .026 },
-      transMan: { cisWomen: .034, cisMen: .032 },
+      transWoman: { alignedWomen: .017, alignedMen: .026 },
+      transMan: { alignedWomen: .034, alignedMen: .032 },
     };
     return { rate: rates[self][partner], sources: ['ons','blair'], confidence: 'low' };
   }
 
   if (self === 'nonbinary') {
-    return { rate: partner === 'cisWomen' ? .031 : .022, sources: ['ons','usts'], confidence: 'low' };
+    return { rate: partner === 'alignedWomen' ? .031 : .022, sources: ['ons','usts'], confidence: 'low' };
   }
 
-  const cisRates = {
-    cisWoman: { cisWomen: .034, cisMen: .941 },
-    cisMan: { cisWomen: .957, cisMen: .040 },
+  const alignedRates = {
+    alignedWoman: { alignedWomen: .034, alignedMen: .941 },
+    alignedMan: { alignedWomen: .957, alignedMen: .040 },
   };
-  return { rate: cisRates[self][partner], sources: ['ons'], confidence: 'medium' };
+  return { rate: alignedRates[self][partner], sources: ['ons'], confidence: 'medium' };
 }
 
 function ageShare(min, max) {
@@ -218,13 +248,15 @@ function calculateModel() {
     : state.livePopulation;
   const minAge = Number($('#ageMin').value);
   const maxAge = Number($('#ageMax').value);
+  const religionFactor = multiSelectFactor('religionChoice');
+  const backgroundFactor = multiSelectFactor('backgroundChoice');
   const factors = [
     { key: 'Gender mix', value: genderFactor(), show: state.step >= 2 },
     { key: 'Reciprocal dating openness', value: Number($('#orientationRate').value) / 100, show: state.step >= 2 },
     { key: `Age ${minAge}–${maxAge}`, value: ageShare(minAge, maxAge), show: state.step >= 3 },
     { key: 'Single & open', value: Number($('#availability').value) / 100, show: state.step >= 3 },
-    { key: $('#religion').selectedOptions[0].text, value: Number($('#religion').value), show: state.step >= 4 && Number($('#religion').value) < 1 },
-    { key: $('#background').selectedOptions[0].text, value: Number($('#background').value), show: state.step >= 4 && Number($('#background').value) < 1 },
+    { key: multiSelectLabel('religionChoice', 'Religion open', 'religions'), value: religionFactor, show: state.step >= 4 && religionFactor < 1 },
+    { key: multiSelectLabel('backgroundChoice', 'Background open', 'backgrounds'), value: backgroundFactor, show: state.step >= 4 && backgroundFactor < 1 },
     { key: Number($('#income').value) ? `Income ≥ ${money(Number($('#income').value))}` : 'Income open', value: incomeShare(Number($('#income').value)), show: state.step >= 5 && Number($('#income').value) > 0 },
     { key: 'Children preference', value: Number(selectedValue('kids')), show: state.step >= 5 && Number(selectedValue('kids')) < 1 },
     { key: 'Non-smoker', value: $('#nonSmoker').checked ? .78 : 1, show: state.step >= 5 && $('#nonSmoker').checked },
@@ -411,6 +443,7 @@ function bindEvents() {
   });
   $('#selectWorld').addEventListener('click', () => { state.selectedCountries = []; renderSelectedCountries(); recalculate(); });
   $$('input, select', $('#studyForm')).forEach(input => input.addEventListener('input', () => {
+    if (input.matches('[name="religionChoice"], [name="backgroundChoice"]')) normalizeMultiSelect(input);
     if (input.matches('[name="selfGender"], [name="orientation"], [name="partnerGender"]') && state.step <= 2) syncOrientationDefault();
     if (input.id === 'orientationRate') {
       state.reciprocalCustomized = true;
@@ -446,12 +479,14 @@ function resetStudy() {
   $('#studyForm').reset();
   state.selectedCountries = [];
   renderSelectedCountries();
+  updateMultiSelectSummaries();
   syncOrientationDefault();
   updateOutputs();
   showStep(0);
 }
 
 bindEvents();
+updateMultiSelectSummaries();
 syncOrientationDefault();
 updateOutputs();
 fetchWorldData().then(animateCounter);

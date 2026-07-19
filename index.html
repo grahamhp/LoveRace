@@ -19,7 +19,7 @@
     <section class="intro" id="intro">
       <div class="intro-kicker">One world. Billions of possibilities.</div>
       <h1>How many people<br />could be <em>your person?</em></h1>
-      <p class="intro-copy">Begin with everyone. Add what matters. See what changes—and what it might take to actually meet.</p>
+      <p class="intro-copy">Begin with everyone. Add what matters. See what changes, and what it might take to actually meet.</p>
       <button class="start-button" id="startButton">
         <span>Begin the study</span>
         <span class="button-arrow">↓</span>
@@ -62,9 +62,9 @@
             <fieldset>
               <legend>I describe my gender as</legend>
               <div class="option-grid" id="selfGender">
-                <label class="option-card"><input type="radio" name="selfGender" value="cisWoman" checked /><span><b>Cis woman</b></span></label>
+                <label class="option-card"><input type="radio" name="selfGender" value="alignedWoman" checked /><span><b>Gender-aligned woman</b></span></label>
                 <label class="option-card"><input type="radio" name="selfGender" value="transWoman" /><span><b>Trans woman</b></span></label>
-                <label class="option-card"><input type="radio" name="selfGender" value="cisMan" /><span><b>Cis man</b></span></label>
+                <label class="option-card"><input type="radio" name="selfGender" value="alignedMan" /><span><b>Gender-aligned man</b></span></label>
                 <label class="option-card"><input type="radio" name="selfGender" value="transMan" /><span><b>Trans man</b></span></label>
                 <label class="option-card"><input type="radio" name="selfGender" value="nonbinary" /><span><b>Nonbinary</b></span></label>
                 <label class="option-card"><input type="radio" name="selfGender" value="skip" /><span><b>Prefer not to say</b><small>use a neutral proxy</small></span></label>
@@ -90,9 +90,9 @@
             <fieldset>
               <legend>I’m open to dating…</legend>
               <div class="large-checks">
-                <label><input type="checkbox" name="partnerGender" value="cisWomen" /><span class="check-mark">✓</span><span><b>Cis women</b></span></label>
+                <label><input type="checkbox" name="partnerGender" value="alignedWomen" /><span class="check-mark">✓</span><span><b>Gender-aligned women</b></span></label>
                 <label><input type="checkbox" name="partnerGender" value="transWomen" /><span class="check-mark">✓</span><span><b>Trans women</b></span></label>
-                <label><input type="checkbox" name="partnerGender" value="cisMen" checked /><span class="check-mark">✓</span><span><b>Cis men</b></span></label>
+                <label><input type="checkbox" name="partnerGender" value="alignedMen" checked /><span class="check-mark">✓</span><span><b>Gender-aligned men</b></span></label>
                 <label><input type="checkbox" name="partnerGender" value="transMen" /><span class="check-mark">✓</span><span><b>Trans men</b></span></label>
                 <label><input type="checkbox" name="partnerGender" value="nonbinary" /><span class="check-mark">✓</span><span><b>Nonbinary people</b></span></label>
               </div>
@@ -107,7 +107,7 @@
                 <span class="confidence medium" id="estimateConfidence">Measured proxy</span>
                 <button type="button" id="restoreEstimate">Restore research default</button>
               </div>
-              <b id="estimateSummary">About 94 in 100 cis men report an orientation that could include a cis woman.</b>
+              <b id="estimateSummary">About 94 in 100 gender-aligned men report an orientation that could include a gender-aligned woman.</b>
               <p id="estimateBasis">Based on the UK Office for National Statistics 2024 sexual-identity distribution.</p>
               <div class="estimate-breakdown" id="estimateBreakdown"></div>
               <div class="estimate-definition"><strong>What this number means</strong><span>It removes people whose stated orientation or dating preferences probably would not include someone with your identity. It does not estimate whether they will be attracted to you personally.</span></div>
@@ -123,17 +123,19 @@
             <div class="eyebrow">Life stage</div>
             <h2>What age feels right?</h2>
             <p class="step-deck">Age is estimated from UN population distributions. This is a population share, not a judgment about compatibility.</p>
-            <div class="age-display"><span id="ageMinDisplay">27</span><i>—</i><span id="ageMaxDisplay">42</span></div>
+            <div class="age-display"><span id="ageMinDisplay">27</span><i>–</i><span id="ageMaxDisplay">42</span></div>
             <div class="dual-range" id="ageRange">
               <div class="range-rail"><div class="range-between" id="ageBetween"></div></div>
               <input id="ageMin" type="range" min="18" max="85" value="27" aria-label="Minimum age" />
               <input id="ageMax" type="range" min="18" max="85" value="42" aria-label="Maximum age" />
             </div>
             <div class="range-labels"><span>18</span><span>85+</span></div>
+            <p class="field-caveat research-caveat">The current age estimate uses a worldwide age curve, even when countries are selected. Country-specific age structure is not applied yet. <a href="https://population.un.org/wpp/" target="_blank" rel="noreferrer">UN World Population Prospects 2024 ↗</a></p>
             <div class="subquestion">
               <label for="availability">Likely single and open to a relationship</label>
               <div class="slider-line"><input id="availability" type="range" min="10" max="80" value="38" /><output id="availabilityOutput">38%</output></div>
-              <small>This varies enormously by age and country. Adjust it to reflect your dating environment.</small>
+              <small>38% is a broad, adjustable starting point, not an age- or country-specific result. Partnership status varies with age, sex, local definitions of marriage and cohabitation, law, economics, and social norms.</small>
+              <div class="research-links"><a href="https://www.un.org/development/desa/pd/node/3593" target="_blank" rel="noreferrer">UN World Marriage Data · age and sex, 232 countries ↗</a><a href="https://www.oecd.org/en/data/datasets/oecd-family-database.html" target="_blank" rel="noreferrer">OECD Family Database · marriage and cohabitation ↗</a></div>
             </div>
           </section>
 
@@ -143,29 +145,37 @@
             <p class="step-deck">Both are optional. Global categories are blunt instruments, so “open to any” is always the most statistically honest default.</p>
             <fieldset>
               <legend>Religion or worldview</legend>
-              <select id="religion">
-                <option value="1">Open to any</option>
-                <option value="0.288">Christian</option>
-                <option value="0.256">Muslim</option>
-                <option value="0.149">Hindu</option>
-                <option value="0.041">Buddhist</option>
-                <option value="0.242">Religiously unaffiliated</option>
-                <option value="0.024">Jewish, folk, or another faith</option>
-              </select>
+              <details class="multi-select" id="religionSelect">
+                <summary><span id="religionSummary">Open to any religion or worldview</span><i>＋</i></summary>
+                <div class="multi-select-menu">
+                  <label class="multi-choice"><input type="checkbox" name="religionChoice" value="1" data-any="true" data-label="Open to any religion or worldview" checked /><span>Open to any religion or worldview</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="religionChoice" value="0.288" data-label="Christian" /><span>Christian</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="religionChoice" value="0.256" data-label="Muslim" /><span>Muslim</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="religionChoice" value="0.149" data-label="Hindu" /><span>Hindu</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="religionChoice" value="0.041" data-label="Buddhist" /><span>Buddhist</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="religionChoice" value="0.242" data-label="Religiously unaffiliated" /><span>Religiously unaffiliated</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="religionChoice" value="0.002" data-label="Jewish" /><span>Jewish</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="religionChoice" value="0.022" data-label="Folk or another faith" /><span>Folk or another faith</span></label>
+                </div>
+              </details>
+              <small class="field-caveat">Select any number. Selected global shares are added together.</small>
             </fieldset>
             <fieldset>
               <legend>Cultural or regional background</legend>
-              <select id="background">
-                <option value="1">Open to any background</option>
-                <option value="0.29">East or Southeast Asian heritage</option>
-                <option value="0.25">South Asian heritage</option>
-                <option value="0.18">Black or African-diaspora heritage</option>
-                <option value="0.09">European heritage</option>
-                <option value="0.08">Latin American or Caribbean heritage</option>
-                <option value="0.06">Middle Eastern or North African heritage</option>
-                <option value="0.03">Indigenous, mixed, or another background</option>
-              </select>
-              <small class="field-caveat">A low-confidence regional proxy—not an ethnicity census. Categories overlap across identity, ancestry, and place.</small>
+              <details class="multi-select" id="backgroundSelect">
+                <summary><span id="backgroundSummary">Open to any background</span><i>＋</i></summary>
+                <div class="multi-select-menu">
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="1" data-any="true" data-label="Open to any background" checked /><span>Open to any background</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.29" data-label="East or Southeast Asian heritage" /><span>East or Southeast Asian heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.25" data-label="South Asian heritage" /><span>South Asian heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.18" data-label="Black or African-diaspora heritage" /><span>Black or African-diaspora heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.09" data-label="European heritage" /><span>European heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.08" data-label="Latin American or Caribbean heritage" /><span>Latin American or Caribbean heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.06" data-label="Middle Eastern or North African heritage" /><span>Middle Eastern or North African heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.03" data-label="Indigenous, mixed, or another background" /><span>Indigenous, mixed, or another background</span></label>
+                </div>
+              </details>
+              <small class="field-caveat">Select any number. This is a low-confidence regional proxy, not an ethnicity census. Categories can overlap across identity, ancestry, and place, although the model adds them as broad population shares.</small>
             </fieldset>
             <div class="data-note"><span class="confidence medium">Mixed confidence</span> Religion uses a measured global baseline; background is a coarse proxy and is labeled accordingly.</div>
           </section>
@@ -248,9 +258,9 @@
         <div class="odds-panel" id="oddsPanel">
           <div class="odds-intro"><span>Live calculation</span> At your current pace, your estimated chance reaches…</div>
           <div class="odds-grid">
-            <div><span>20%</span><b id="chance20">—</b><small>from now</small></div>
-            <div><span>50%</span><b id="chance50">—</b><small>from now</small></div>
-            <div><span>80%</span><b id="chance80">—</b><small>from now</small></div>
+            <div><span>20%</span><b id="chance20">...</b><small>from now</small></div>
+            <div><span>50%</span><b id="chance50">...</b><small>from now</small></div>
+            <div><span>80%</span><b id="chance80">...</b><small>from now</small></div>
           </div>
           <p id="oddsFootnote"></p>
           <button class="adjust-button" id="adjustInputs" type="button"><span>Adjust weekly inputs</span><span>↓</span></button>
@@ -263,29 +273,54 @@
 
   <dialog id="methodDialog">
     <div class="dialog-head"><span>THE FINE PRINT / 01</span><button class="dialog-close" aria-label="Close">×</button></div>
+    <div class="method-alert">
+      <span>Read this first</span>
+      <p>The encounter model assumes that new people are independent random draws. Real social circles, dating apps, neighborhoods, workplaces, and repeated encounters are highly clustered. If you are actively seeking a partner, you are also changing the process through where you go, whom you approach, which platforms you use, and how often you create new opportunities. Your search behavior can change the odds beyond what a random-encounter model can capture.</p>
+    </div>
     <div class="dialog-content">
       <div>
         <div class="eyebrow">Not fate. A model.</div>
         <h2>Honest numbers,<br /><em>soft edges.</em></h2>
+        <p class="method-side-note">Read the result as a transparent scenario built from visible assumptions, not as a deadline or a verdict about anyone's future.</p>
       </div>
       <div class="method-copy">
         <p>Love is not a lookup table. This project estimates how filters change a population pool, then uses a probability model to translate new encounters into time. It cannot measure chemistry, circumstance, safety, or who will surprise you.</p>
+        <h3>What is being modeled</h3>
+        <p>The model begins with the world population or the combined population of selected countries. It then applies broad shares for partner gender, reciprocal dating openness, age, relationship availability, religion, background, income, and selected lifestyle preferences.</p>
+        <p>Country selection currently changes the starting population and helps calibrate income. Age, religion, background, relationship availability, gender mix, and orientation assumptions still use worldwide or external proxy distributions. The age curve is global even when countries are selected.</p>
         <h3>The calculation</h3>
         <p><code>pool = population × each selected factor</code></p>
-        <p><code>weekly chance = pool share × relevant encounters × mutual connection rate</code></p>
-        <p><code>P(by week n) = 1 − (1 − p)<sup>n</sup></code></p>
+        <p><code>chance per encounter = pool share × geographic relevance × connection assumption</code></p>
+        <p><code>weekly chance = 1 − (1 − chance per encounter)<sup>new people per week</sup></code></p>
+        <p><code>P(by week n) = 1 − (1 − weekly chance)<sup>n</sup></code></p>
+        <h3>What the model simplifies</h3>
+        <ul class="method-list">
+          <li><strong>Filters are treated as independent.</strong> In reality, age, country, income, religion, background, orientation, relationship status, gender identity, and family preferences influence one another. Multiplying separate population shares can make the combined pool too large or too small.</li>
+          <li><strong>Relationship availability is adjustable.</strong> The 38% default is a broad starting assumption. It is not calculated from the selected age range or countries, and unmarried does not necessarily mean single and open to dating.</li>
+          <li><strong>Background selections are approximate.</strong> The categories can overlap, but selected shares are added as though they are separate. The current category shares total 98%, not 100%.</li>
+          <li><strong>Gender population shares are assumptions.</strong> There is no unified worldwide measurement that cleanly separates gender-aligned, trans, and nonbinary populations using consistent definitions.</li>
+          <li><strong>The orientation answer is descriptive.</strong> The genders selected as possible partners drive the reciprocal dating-openness calculation. The user's orientation label does not independently change the number.</li>
+          <li><strong>Dating-openness evidence varies in quality.</strong> Estimates involving trans and nonbinary people rely on geographically limited studies and orientation proxies. They are marked as limited evidence.</li>
+          <li><strong>The displayed range is a sensitivity cue.</strong> It broadens as more assumptions are added, but it is not a formal statistical confidence interval.</li>
+          <li><strong>Encounters are not truly random.</strong> Social networks, apps, work, geography, repeated contacts, personal behavior, and active searching all change who someone is likely to meet.</li>
+          <li><strong>Eligibility is not compatibility.</strong> The model cannot measure chemistry, timing, shared values in practice, emotional availability, reciprocal effort, safety, or unexpected life events.</li>
+        </ul>
+        <h3>How to read the result</h3>
+        <p>The output is best interpreted as a what-if statement: given these population assumptions, these filters, and this rate of meeting new people, what does a simplified probability model imply? It is useful for comparing scenarios and understanding scale. It is not a personal forecast.</p>
         <h3>Data sources</h3>
         <ul class="source-list">
-          <li><a href="https://data.worldbank.org/indicator/SP.POP.TOTL" target="_blank" rel="noreferrer">World Bank — population totals</a><span>Live API; high confidence</span></li>
+          <li><a href="https://data.worldbank.org/indicator/SP.POP.TOTL" target="_blank" rel="noreferrer">World Bank: population totals</a><span>Live API; high confidence</span></li>
           <li><a href="https://population.un.org/wpp/" target="_blank" rel="noreferrer">UN World Population Prospects 2024</a><span>Age and sex distributions</span></li>
-          <li><a href="https://www.pewresearch.org/religion/2025/06/09/how-the-global-religious-landscape-changed-from-2010-to-2020/" target="_blank" rel="noreferrer">Pew Research Center — global religion</a><span>2020 estimates, published 2025</span></li>
-          <li><a href="https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2024" target="_blank" rel="noreferrer">UK ONS — Sexual orientation, 2024</a><span>Cis-pair orientation baseline; official UK proxy</span></li>
-          <li><a href="https://doi.org/10.1177/0265407518779139" target="_blank" rel="noreferrer">Blair & Hoskin — Transgender exclusion from dating</a><span>Stated dating choices, N=958</span></li>
+          <li><a href="https://www.pewresearch.org/religion/2025/06/09/how-the-global-religious-landscape-changed-from-2010-to-2020/" target="_blank" rel="noreferrer">Pew Research Center: global religion</a><span>2020 estimates, published 2025</span></li>
+          <li><a href="https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2024" target="_blank" rel="noreferrer">UK ONS: Sexual orientation, 2024</a><span>Gender-aligned pair orientation baseline; official UK proxy</span></li>
+          <li><a href="https://www.un.org/development/desa/pd/node/3593" target="_blank" rel="noreferrer">UN World Marriage Data 2019</a><span>Marital status by age and sex across 232 countries or areas</span></li>
+          <li><a href="https://www.oecd.org/en/data/datasets/oecd-family-database.html" target="_blank" rel="noreferrer">OECD Family Database</a><span>Marriage, divorce, cohabitation, and partnership definitions</span></li>
+          <li><a href="https://doi.org/10.1177/0265407518779139" target="_blank" rel="noreferrer">Blair & Hoskin: Transgender exclusion from dating</a><span>Stated dating choices, N=958</span></li>
           <li><a href="https://transequality.org/sites/default/files/docs/usts/USTS-Full-Report-Dec17.pdf" target="_blank" rel="noreferrer">2015 U.S. Transgender Survey</a><span>Trans respondents’ orientation distribution, N=27,715</span></li>
-          <li><a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CD" target="_blank" rel="noreferrer">World Bank — GDP per capita</a><span>Income-model calibration</span></li>
+          <li><a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CD" target="_blank" rel="noreferrer">World Bank: GDP per capita</a><span>Income-model calibration</span></li>
         </ul>
         <h3>Important limitations</h3>
-        <p>Survey categories and coverage differ by country. Dating-openness research involving trans partners is limited: the Blair and Hoskin sample was predominantly Canadian and American, had a mean age of 25.5, and is not globally representative. ONS measures sexual identity rather than attraction or behavior. USTS is a large U.S. convenience sample. Income, relationship status, cultural background, and values use broad adjustable proxies. Filters are treated as independent even though real demographics overlap.</p>
+        <p>Source years, definitions, sampling methods, and geographic coverage differ. Dating-openness research involving trans partners is limited: the Blair and Hoskin sample was predominantly Canadian and American, had a mean age of 25.5, and is not globally representative. ONS measures sexual identity rather than attraction or behavior. USTS is a large U.S. convenience sample. Income, relationship status, cultural background, and values use broad adjustable proxies. Combining these sources creates an informed simplification of reality, not a unified census.</p>
       </div>
     </div>
   </dialog>
