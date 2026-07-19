@@ -1,4 +1,4 @@
-# LoveRace
+# LoveRace: A probability study of human connection
 
 A dependency-free interactive prototype that estimates a potential partner pool and translates weekly encounters into 20%, 50%, and 80% probability timelines.
 
