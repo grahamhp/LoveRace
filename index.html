@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A transparent, probabilistic portrait of your potential partner pool." />
+  <title>Love, by the numbers — LoveRace</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="wordmark" href="#" aria-label="LoveRace home">LOVE<span>/</span>RACE</a>
+    <div class="header-note">A probability study of human connection</div>
+    <button class="text-button" id="openMethod">Methodology <span>↗</span></button>
+  </header>
+
+  <main>
+    <section class="intro" id="intro">
+      <div class="intro-kicker">One world. Billions of possibilities.</div>
+      <h1>How many people<br />could be <em>your person?</em></h1>
+      <p class="intro-copy">Begin with everyone. Add what matters. See what changes—and what it might take to actually meet.</p>
+      <button class="start-button" id="startButton">
+        <span>Begin the study</span>
+        <span class="button-arrow">↓</span>
+      </button>
+    </section>
+
+    <section class="study-shell" id="study" aria-label="Partner probability study">
+      <div class="question-panel">
+        <div class="study-progress-wrap">
+          <span id="stepLabel">01 / 07</span>
+          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+          <button class="quiet-button" id="resetButton">Reset</button>
+        </div>
+
+        <form id="studyForm" novalidate>
+          <section class="step active" data-step="0">
+            <div class="eyebrow">First, make the world smaller</div>
+            <h2>Where could love realistically live?</h2>
+            <p class="step-deck">Choose any country you would genuinely date in, travel to, or relocate for. Start broad; you can always change it.</p>
+            <div class="field-block">
+              <label for="countrySearch">Search countries</label>
+              <div class="search-wrap">
+                <input id="countrySearch" type="search" placeholder="Type a country…" autocomplete="off" />
+                <span>⌕</span>
+              </div>
+              <div class="country-results" id="countryResults" role="listbox" aria-label="Country results"></div>
+            </div>
+            <div class="selection-row">
+              <button type="button" class="choice-chip active" id="selectWorld">The whole world</button>
+              <span class="selection-or">or</span>
+              <div id="selectedCountries" class="selected-countries"><span class="empty-selection">select one or more countries</span></div>
+            </div>
+            <div class="data-note"><span class="confidence high">High confidence</span> Country populations update from the World Bank when available.</div>
+          </section>
+
+          <section class="step" data-step="1">
+            <div class="eyebrow">Desire, without assumptions</div>
+            <h2>Tell us about you.</h2>
+            <p class="step-deck">Your identity determines which partner-preference research applies to the people you select next.</p>
+            <fieldset>
+              <legend>I describe my gender as</legend>
+              <div class="option-grid" id="selfGender">
+                <label class="option-card"><input type="radio" name="selfGender" value="cisWoman" checked /><span><b>Cis woman</b></span></label>
+                <label class="option-card"><input type="radio" name="selfGender" value="transWoman" /><span><b>Trans woman</b></span></label>
+                <label class="option-card"><input type="radio" name="selfGender" value="cisMan" /><span><b>Cis man</b></span></label>
+                <label class="option-card"><input type="radio" name="selfGender" value="transMan" /><span><b>Trans man</b></span></label>
+                <label class="option-card"><input type="radio" name="selfGender" value="nonbinary" /><span><b>Nonbinary</b></span></label>
+                <label class="option-card"><input type="radio" name="selfGender" value="skip" /><span><b>Prefer not to say</b><small>use a neutral proxy</small></span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>My orientation is closest to</legend>
+              <div class="pill-options">
+                <label><input type="radio" name="orientation" value="straight" checked /><span>Straight</span></label>
+                <label><input type="radio" name="orientation" value="gay" /><span>Gay / lesbian</span></label>
+                <label><input type="radio" name="orientation" value="bi" /><span>Bi / pan</span></label>
+                <label><input type="radio" name="orientation" value="queer" /><span>Queer / another</span></label>
+                <label><input type="radio" name="orientation" value="skip" /><span>Skip</span></label>
+              </div>
+            </fieldset>
+            <div class="data-note"><span class="confidence low">Coverage varies</span> Gender-identity and orientation data are not collected consistently worldwide.</div>
+          </section>
+
+          <section class="step" data-step="2">
+            <div class="eyebrow">Who you are open to</div>
+            <h2>Who could your person be?</h2>
+            <p class="step-deck">Select every gender identity you would genuinely consider. We account for the chance that their orientation includes you.</p>
+            <fieldset>
+              <legend>I’m open to dating…</legend>
+              <div class="large-checks">
+                <label><input type="checkbox" name="partnerGender" value="cisWomen" /><span class="check-mark">✓</span><span><b>Cis women</b></span></label>
+                <label><input type="checkbox" name="partnerGender" value="transWomen" /><span class="check-mark">✓</span><span><b>Trans women</b></span></label>
+                <label><input type="checkbox" name="partnerGender" value="cisMen" checked /><span class="check-mark">✓</span><span><b>Cis men</b></span></label>
+                <label><input type="checkbox" name="partnerGender" value="transMen" /><span class="check-mark">✓</span><span><b>Trans men</b></span></label>
+                <label><input type="checkbox" name="partnerGender" value="nonbinary" /><span class="check-mark">✓</span><span><b>Nonbinary people</b></span></label>
+              </div>
+            </fieldset>
+            <div class="inline-setting">
+              <div><b>Estimated reciprocal dating openness</b><small>The share of people selected above whose reported orientation and dating preferences could include someone with your identity.</small></div>
+              <output id="orientationOutput">94.1%</output>
+              <input id="orientationRate" type="range" min="0.1" max="100" step="0.1" value="94.1" aria-label="Estimated reciprocal dating openness" />
+            </div>
+            <div class="estimate-evidence">
+              <div class="estimate-evidence-head">
+                <span class="confidence medium" id="estimateConfidence">Measured proxy</span>
+                <button type="button" id="restoreEstimate">Restore research default</button>
+              </div>
+              <b id="estimateSummary">About 94 in 100 cis men report an orientation that could include a cis woman.</b>
+              <p id="estimateBasis">Based on the UK Office for National Statistics 2024 sexual-identity distribution.</p>
+              <div class="estimate-breakdown" id="estimateBreakdown"></div>
+              <div class="estimate-definition"><strong>What this number means</strong><span>It removes people whose stated orientation or dating preferences probably would not include someone with your identity. It does not estimate whether they will be attracted to you personally.</span></div>
+              <div class="estimate-sources" id="estimateSources">
+                <a data-source="ons" href="https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2024" target="_blank" rel="noreferrer">ONS 2024 <span>official orientation data ↗</span></a>
+                <a data-source="blair" href="https://doi.org/10.1177/0265407518779139" target="_blank" rel="noreferrer">Blair & Hoskin 2019 <span>dating choices, N=958 ↗</span></a>
+                <a data-source="usts" href="https://transequality.org/sites/default/files/docs/usts/USTS-Full-Report-Dec17.pdf" target="_blank" rel="noreferrer">U.S. Transgender Survey 2015 <span>orientation data, N=27,715 ↗</span></a>
+              </div>
+            </div>
+          </section>
+
+          <section class="step" data-step="3">
+            <div class="eyebrow">Life stage</div>
+            <h2>What age feels right?</h2>
+            <p class="step-deck">Age is estimated from UN population distributions. This is a population share, not a judgment about compatibility.</p>
+            <div class="age-display"><span id="ageMinDisplay">27</span><i>—</i><span id="ageMaxDisplay">42</span></div>
+            <div class="dual-range" id="ageRange">
+              <div class="range-rail"><div class="range-between" id="ageBetween"></div></div>
+              <input id="ageMin" type="range" min="18" max="85" value="27" aria-label="Minimum age" />
+              <input id="ageMax" type="range" min="18" max="85" value="42" aria-label="Maximum age" />
+            </div>
+            <div class="range-labels"><span>18</span><span>85+</span></div>
+            <div class="subquestion">
+              <label for="availability">Likely single and open to a relationship</label>
+              <div class="slider-line"><input id="availability" type="range" min="10" max="80" value="38" /><output id="availabilityOutput">38%</output></div>
+              <small>This varies enormously by age and country. Adjust it to reflect your dating environment.</small>
+            </div>
+          </section>
+
+          <section class="step" data-step="4">
+            <div class="eyebrow">Belief & background</div>
+            <h2>What should feel familiar?</h2>
+            <p class="step-deck">Both are optional. Global categories are blunt instruments, so “open to any” is always the most statistically honest default.</p>
+            <fieldset>
+              <legend>Religion or worldview</legend>
+              <select id="religion">
+                <option value="1">Open to any</option>
+                <option value="0.288">Christian</option>
+                <option value="0.256">Muslim</option>
+                <option value="0.149">Hindu</option>
+                <option value="0.041">Buddhist</option>
+                <option value="0.242">Religiously unaffiliated</option>
+                <option value="0.024">Jewish, folk, or another faith</option>
+              </select>
+            </fieldset>
+            <fieldset>
+              <legend>Cultural or regional background</legend>
+              <select id="background">
+                <option value="1">Open to any background</option>
+                <option value="0.29">East or Southeast Asian heritage</option>
+                <option value="0.25">South Asian heritage</option>
+                <option value="0.18">Black or African-diaspora heritage</option>
+                <option value="0.09">European heritage</option>
+                <option value="0.08">Latin American or Caribbean heritage</option>
+                <option value="0.06">Middle Eastern or North African heritage</option>
+                <option value="0.03">Indigenous, mixed, or another background</option>
+              </select>
+              <small class="field-caveat">A low-confidence regional proxy—not an ethnicity census. Categories overlap across identity, ancestry, and place.</small>
+            </fieldset>
+            <div class="data-note"><span class="confidence medium">Mixed confidence</span> Religion uses a measured global baseline; background is a coarse proxy and is labeled accordingly.</div>
+          </section>
+
+          <section class="step" data-step="5">
+            <div class="eyebrow">Practical compatibility</div>
+            <h2>What does a shared life need?</h2>
+            <p class="step-deck">Keep what matters. Leave the rest open. Income is modeled against local economic data when available.</p>
+            <div class="money-setting">
+              <div class="money-head"><label for="income">Minimum annual income <span>(USD equivalent)</span></label><output id="incomeOutput">No minimum</output></div>
+              <input id="income" type="range" min="0" max="200000" step="5000" value="0" />
+              <div class="range-labels"><span>Open</span><span>$200k+</span></div>
+            </div>
+            <fieldset>
+              <legend>Children</legend>
+              <div class="pill-options compact">
+                <label><input type="radio" name="kids" value="1" checked /><span>Open / not sure</span></label>
+                <label><input type="radio" name="kids" value="0.46" /><span>Wants children</span></label>
+                <label><input type="radio" name="kids" value="0.34" /><span>Doesn’t want children</span></label>
+                <label><input type="radio" name="kids" value="0.22" /><span>Already has children</span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Lifestyle</legend>
+              <div class="pill-options compact">
+                <label><input type="checkbox" id="nonSmoker" /><span>Non-smoker</span></label>
+                <label><input type="checkbox" id="longTerm" /><span>Seeking long-term</span></label>
+              </div>
+            </fieldset>
+          </section>
+
+          <section class="step final-step" data-step="6">
+            <div class="eyebrow">Now, introduce chance</div>
+            <h2>How often do you meet someone new?</h2>
+            <p class="step-deck">A “new person” means someone you speak with long enough to learn whether you might want to see them again. These inputs remain editable and recalculate the results instantly.</p>
+            <div class="hero-setting">
+              <output id="interactionsOutput">6</output>
+              <label for="interactions">new people each week</label>
+              <input id="interactions" type="range" min="1" max="100" value="6" />
+            </div>
+            <div class="subquestion">
+              <label for="relevance">How many encounters are in the geography you chose?</label>
+              <div class="slider-line"><input id="relevance" type="range" min="5" max="100" value="65" /><output id="relevanceOutput">65%</output></div>
+            </div>
+            <div class="subquestion">
+              <label for="spark">Chance of a meaningful mutual connection with an eligible person</label>
+              <div class="slider-line"><input id="spark" type="range" min="1" max="20" value="4" /><output id="sparkOutput">4%</output></div>
+              <small>This is the most personal assumption in the model. Try 2–8% to see a realistic range.</small>
+            </div>
+          </section>
+        </form>
+
+        <div class="step-actions">
+          <button class="back-button" id="backButton" type="button">← Back</button>
+          <button class="next-button" id="nextButton" type="button"><span>Continue</span><span>→</span></button>
+        </div>
+      </div>
+
+      <aside class="result-panel" aria-live="polite">
+        <div class="result-topline">
+          <span id="resultContext">Potential people, worldwide</span>
+          <span class="live-indicator"><i></i> LIVE ESTIMATE</span>
+        </div>
+        <div class="population-number" id="populationNumber">8,141,808,945</div>
+        <div class="uncertainty" id="uncertainty">Likely range 7.98B–8.30B</div>
+
+        <div class="population-lens" aria-label="Share of the starting population that meets the current filters">
+          <div class="ratio-kicker">Equivalent population density</div>
+          <div class="ratio-mark"><span>1</span><i>/</i><b id="ratioNumber">1</b></div>
+          <div class="ratio-copy" id="ratioCopy">Every person is included before filtering.</div>
+          <div class="share-meter" aria-hidden="true"><div class="share-fill" id="shareFill"></div></div>
+          <div class="share-caption"><span id="fractionLabel">100% of the starting population</span><span>remain</span></div>
+        </div>
+
+        <div class="filter-ledger" id="filterLedger">
+          <div class="ledger-title"><span>Your filters</span><span>effect</span></div>
+          <div class="ledger-empty">Your choices will appear here.</div>
+        </div>
+
+        <div class="odds-panel" id="oddsPanel">
+          <div class="odds-intro"><span>Live calculation</span> At your current pace, your estimated chance reaches…</div>
+          <div class="odds-grid">
+            <div><span>20%</span><b id="chance20">—</b><small>from now</small></div>
+            <div><span>50%</span><b id="chance50">—</b><small>from now</small></div>
+            <div><span>80%</span><b id="chance80">—</b><small>from now</small></div>
+          </div>
+          <p id="oddsFootnote"></p>
+          <button class="adjust-button" id="adjustInputs" type="button"><span>Adjust weekly inputs</span><span>↓</span></button>
+        </div>
+
+        <button class="assumptions-button" id="openAssumptions">View assumptions & sources <span>＋</span></button>
+      </aside>
+    </section>
+  </main>
+
+  <dialog id="methodDialog">
+    <div class="dialog-head"><span>THE FINE PRINT / 01</span><button class="dialog-close" aria-label="Close">×</button></div>
+    <div class="dialog-content">
+      <div>
+        <div class="eyebrow">Not fate. A model.</div>
+        <h2>Honest numbers,<br /><em>soft edges.</em></h2>
+      </div>
+      <div class="method-copy">
+        <p>Love is not a lookup table. This project estimates how filters change a population pool, then uses a probability model to translate new encounters into time. It cannot measure chemistry, circumstance, safety, or who will surprise you.</p>
+        <h3>The calculation</h3>
+        <p><code>pool = population × each selected factor</code></p>
+        <p><code>weekly chance = pool share × relevant encounters × mutual connection rate</code></p>
+        <p><code>P(by week n) = 1 − (1 − p)<sup>n</sup></code></p>
+        <h3>Data sources</h3>
+        <ul class="source-list">
+          <li><a href="https://data.worldbank.org/indicator/SP.POP.TOTL" target="_blank" rel="noreferrer">World Bank — population totals</a><span>Live API; high confidence</span></li>
+          <li><a href="https://population.un.org/wpp/" target="_blank" rel="noreferrer">UN World Population Prospects 2024</a><span>Age and sex distributions</span></li>
+          <li><a href="https://www.pewresearch.org/religion/2025/06/09/how-the-global-religious-landscape-changed-from-2010-to-2020/" target="_blank" rel="noreferrer">Pew Research Center — global religion</a><span>2020 estimates, published 2025</span></li>
+          <li><a href="https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/sexuality/bulletins/sexualidentityuk/2024" target="_blank" rel="noreferrer">UK ONS — Sexual orientation, 2024</a><span>Cis-pair orientation baseline; official UK proxy</span></li>
+          <li><a href="https://doi.org/10.1177/0265407518779139" target="_blank" rel="noreferrer">Blair & Hoskin — Transgender exclusion from dating</a><span>Stated dating choices, N=958</span></li>
+          <li><a href="https://transequality.org/sites/default/files/docs/usts/USTS-Full-Report-Dec17.pdf" target="_blank" rel="noreferrer">2015 U.S. Transgender Survey</a><span>Trans respondents’ orientation distribution, N=27,715</span></li>
+          <li><a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CD" target="_blank" rel="noreferrer">World Bank — GDP per capita</a><span>Income-model calibration</span></li>
+        </ul>
+        <h3>Important limitations</h3>
+        <p>Survey categories and coverage differ by country. Dating-openness research involving trans partners is limited: the Blair and Hoskin sample was predominantly Canadian and American, had a mean age of 25.5, and is not globally representative. ONS measures sexual identity rather than attraction or behavior. USTS is a large U.S. convenience sample. Income, relationship status, cultural background, and values use broad adjustable proxies. Filters are treated as independent even though real demographics overlap.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
