@@ -273,21 +273,14 @@
 
   <dialog id="methodDialog">
     <div class="dialog-head"><span>THE FINE PRINT / 01</span><button class="dialog-close" aria-label="Close">×</button></div>
-    <div class="method-alert">
-      <span>Read this first</span>
-      <p>The encounter model assumes that new people are independent random draws. Real social circles, dating apps, neighborhoods, workplaces, and repeated encounters are highly clustered. If you are actively seeking a partner, you are also changing the process through where you go, whom you approach, which platforms you use, and how often you create new opportunities. Your search behavior can change the odds beyond what a random-encounter model can capture.</p>
-    </div>
     <div class="dialog-content">
-      <div>
-        <div class="eyebrow">Not fate. A model.</div>
+      <div class="method-title">
         <h2>Honest numbers,<br /><em>soft edges.</em></h2>
-        <p class="method-side-note">Read the result as a transparent scenario built from visible assumptions, not as a deadline or a verdict about anyone's future.</p>
+        <p class="method-lede"><strong>LoveRace is a what-if model, not a forecast.</strong> The encounter calculation treats new people as independent random draws, although real social circles, dating apps, neighborhoods, workplaces, and repeated encounters are highly clustered. Actively seeking a partner also changes the process through where you go, whom you approach, which platforms you use, and how often you create new opportunities.</p>
       </div>
       <div class="method-copy">
-        <p>Love is not a lookup table. This project estimates how filters change a population pool, then uses a probability model to translate new encounters into time. It cannot measure chemistry, circumstance, safety, or who will surprise you.</p>
         <h3>What is being modeled</h3>
-        <p>The model begins with the world population or the combined population of selected countries. It then applies broad shares for partner gender, reciprocal dating openness, age, relationship availability, religion, background, income, and selected lifestyle preferences.</p>
-        <p>Country selection currently changes the starting population and helps calibrate income. Age, religion, background, relationship availability, gender mix, and orientation assumptions still use worldwide or external proxy distributions. The age curve is global even when countries are selected.</p>
+        <p>The model begins with the world population or the combined population of selected countries, then applies broad shares for partner gender, reciprocal dating openness, age, relationship availability, religion, background, income, and lifestyle preferences. Country selection changes the starting population and helps calibrate income. The other distributions remain worldwide or external proxies, including the global age curve.</p>
         <h3>The calculation</h3>
         <p><code>pool = population × each selected factor</code></p>
         <p><code>chance per encounter = pool share × geographic relevance × connection assumption</code></p>
@@ -296,18 +289,12 @@
         <h3>What the model simplifies</h3>
         <ul class="method-list">
           <li><strong>Filters are treated as independent.</strong> In reality, age, country, income, religion, background, orientation, relationship status, gender identity, and family preferences influence one another. Multiplying separate population shares can make the combined pool too large or too small.</li>
-          <li><strong>Relationship availability is adjustable.</strong> The 38% default is a broad starting assumption. It is not calculated from the selected age range or countries, and unmarried does not necessarily mean single and open to dating.</li>
-          <li><strong>Background selections are approximate.</strong> The categories can overlap, but selected shares are added as though they are separate. The current category shares total 98%, not 100%.</li>
-          <li><strong>Gender population shares are assumptions.</strong> There is no unified worldwide measurement that cleanly separates gender-aligned, trans, and nonbinary populations using consistent definitions.</li>
-          <li><strong>The orientation answer is descriptive.</strong> The genders selected as possible partners drive the reciprocal dating-openness calculation. The user's orientation label does not independently change the number.</li>
-          <li><strong>Dating-openness evidence varies in quality.</strong> Estimates involving trans and nonbinary people rely on geographically limited studies and orientation proxies. They are marked as limited evidence.</li>
-          <li><strong>The displayed range is a sensitivity cue.</strong> It broadens as more assumptions are added, but it is not a formal statistical confidence interval.</li>
-          <li><strong>Encounters are not truly random.</strong> Social networks, apps, work, geography, repeated contacts, personal behavior, and active searching all change who someone is likely to meet.</li>
-          <li><strong>Eligibility is not compatibility.</strong> The model cannot measure chemistry, timing, shared values in practice, emotional availability, reciprocal effort, safety, or unexpected life events.</li>
+          <li><strong>Several inputs are broad defaults.</strong> The 38% relationship-availability value is not calculated from age or country. Background categories can overlap even though their shares are added, and the current categories total 98%. Gender population shares are assumptions because no consistent worldwide measurement exists.</li>
+          <li><strong>Orientation and dating openness are separate ideas.</strong> The user's orientation answer is descriptive; selected partner genders drive the reciprocal dating-openness calculation. Estimates involving trans and nonbinary people rely on geographically limited studies and are marked as limited evidence.</li>
+          <li><strong>The range is not a confidence interval.</strong> It is a sensitivity cue that broadens as assumptions are added. Meeting a filter also does not establish chemistry, timing, emotional availability, safety, reciprocal effort, or compatibility.</li>
         </ul>
-        <h3>How to read the result</h3>
-        <p>The output is best interpreted as a what-if statement: given these population assumptions, these filters, and this rate of meeting new people, what does a simplified probability model imply? It is useful for comparing scenarios and understanding scale. It is not a personal forecast.</p>
         <h3>Data sources</h3>
+        <p class="method-source-note">The sources below use different years, definitions, sampling methods, and geographic coverage. Together they form an informed approximation, not a unified census.</p>
         <ul class="source-list">
           <li><a href="https://data.worldbank.org/indicator/SP.POP.TOTL" target="_blank" rel="noreferrer">World Bank: population totals</a><span>Live API; high confidence</span></li>
           <li><a href="https://population.un.org/wpp/" target="_blank" rel="noreferrer">UN World Population Prospects 2024</a><span>Age and sex distributions</span></li>
@@ -319,8 +306,6 @@
           <li><a href="https://transequality.org/sites/default/files/docs/usts/USTS-Full-Report-Dec17.pdf" target="_blank" rel="noreferrer">2015 U.S. Transgender Survey</a><span>Trans respondents’ orientation distribution, N=27,715</span></li>
           <li><a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CD" target="_blank" rel="noreferrer">World Bank: GDP per capita</a><span>Income-model calibration</span></li>
         </ul>
-        <h3>Important limitations</h3>
-        <p>Source years, definitions, sampling methods, and geographic coverage differ. Dating-openness research involving trans partners is limited: the Blair and Hoskin sample was predominantly Canadian and American, had a mean age of 25.5, and is not globally representative. ONS measures sexual identity rather than attraction or behavior. USTS is a large U.S. convenience sample. Income, relationship status, cultural background, and values use broad adjustable proxies. Combining these sources creates an informed simplification of reality, not a unified census.</p>
       </div>
     </div>
   </dialog>

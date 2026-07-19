@@ -229,18 +229,19 @@ dialog { width: min(1050px, 92vw); max-height: 90vh; padding: 0; border: 0; colo
 dialog::backdrop { background: rgba(0,0,0,.74); backdrop-filter: blur(4px); }
 .dialog-head { height: 57px; padding: 0 22px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; font-size: 8px; letter-spacing: .14em; }
 .dialog-close { border: 0; background: none; font-size: 26px; cursor: pointer; }
-.method-alert { display: grid; grid-template-columns: 145px 1fr; gap: 25px; padding: 22px 55px; border-bottom: 1px solid var(--ink); background: var(--acid); }
-.method-alert span { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; }
-.method-alert p { margin: 0; max-width: 760px; font: 14px/1.48 Georgia, serif; }
 .dialog-content { display: grid; grid-template-columns: 42% 58%; padding: 55px; gap: 45px; }
 .dialog-content h2 { margin: 0; font-size: 60px; line-height: .92; letter-spacing: -.06em; }
-.method-side-note { max-width: 290px; margin-top: 24px; color: var(--muted); font: italic 13px/1.5 Georgia, serif; }
+.method-title { align-self: start; }
+.method-lede { max-width: 310px; margin: 28px 0 0; padding-top: 18px; border-top: 1px solid var(--ink); color: var(--muted); font: 13px/1.52 Georgia, serif; }
+.method-lede strong { color: var(--ink); }
 .method-copy { font: 14px/1.6 Georgia, serif; }
-.method-copy h3 { font: 700 9px Helvetica, Arial, sans-serif; text-transform: uppercase; letter-spacing: .13em; margin-top: 28px; }
+.method-copy h3 { font: 700 9px Helvetica, Arial, sans-serif; text-transform: uppercase; letter-spacing: .13em; margin: 0 0 12px; padding-top: 28px; }
+.method-copy h3:first-child { padding-top: 0; }
 .method-copy code { background: var(--warm); padding: 4px 6px; font-size: 12px; }
 .method-list { margin: 0; padding: 0; list-style: none; }
 .method-list li { border-top: 1px solid var(--line); padding: 11px 0; }
 .method-list strong { font-family: Helvetica, Arial, sans-serif; font-size: 11px; }
+.method-source-note { margin: 0 0 15px; color: var(--muted); font-style: italic; }
 .source-list { list-style: none; margin: 0; padding: 0; }
 .source-list li { border-top: 1px solid var(--line); padding: 9px 0; display: flex; flex-direction: column; }
 .source-list a { color: inherit; font-family: Helvetica, Arial, sans-serif; font-size: 12px; }.source-list span { color: var(--muted); font-size: 11px; }
@@ -251,6 +252,7 @@ dialog::backdrop { background: rgba(0,0,0,.74); backdrop-filter: blur(4px); }
   .question-panel { min-height: auto; }
   .population-lens { min-height: 210px; }
   .dialog-content { grid-template-columns: 1fr; }
+  .method-lede { max-width: 680px; }
 }
 @media (max-width: 620px) {
   .site-header { grid-template-columns: 1fr 1fr; padding: 0 18px; }.header-note { display: none; }
@@ -259,7 +261,6 @@ dialog::backdrop { background: rgba(0,0,0,.74); backdrop-filter: blur(4px); }
   .question-panel { padding: 25px 20px; }.step { padding: 55px 0 30px; }.step h2 { font-size: 46px; }
   .option-grid { grid-template-columns: 1fr; }.age-display { font-size: 70px; }
   .estimate-sources { grid-template-columns: 1fr; }.estimate-definition { grid-template-columns: 1fr; gap: 5px; }
-  .method-alert { grid-template-columns: 1fr; gap: 7px; padding: 19px 22px; }
   .dialog-content { padding: 30px 22px; }.dialog-content h2 { font-size: 48px; }
   .odds-grid b { font-size: 12px; }
 }
