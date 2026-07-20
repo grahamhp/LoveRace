@@ -200,6 +200,13 @@ select { width: 100%; border: 0; border-bottom: 1px solid var(--ink); background
 .hero-setting output { display: block; font: 110px/.8 Georgia, serif; letter-spacing: -.08em; }
 .hero-setting label { display: block; margin: 18px 0 25px; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
 .hero-setting input { max-width: 500px; }
+.inline-odds { margin-top: 34px; padding: 18px; border: 1px solid var(--ink); }
+.inline-odds > p { margin: 0 0 15px; color: var(--muted); font: italic 12px/1.4 Georgia, serif; }
+.inline-odds > div { display: grid; grid-template-columns: repeat(3, 1fr); }
+.inline-odds span { min-width: 0; padding: 0 12px; border-left: 1px solid var(--line); }
+.inline-odds span:first-child { padding-left: 0; border: 0; }
+.inline-odds b { display: block; color: var(--orange); font: 23px Georgia, serif; }
+.inline-odds output { display: block; margin-top: 5px; font-size: 12px; font-weight: 700; }
 .step-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); padding-top: 22px; }
 .back-button { border: 0; background: none; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; visibility: hidden; }
 .next-button { min-width: 180px; border: 1px solid var(--ink); background: var(--ink); color: white; padding: 15px 17px; display: flex; justify-content: space-between; cursor: pointer; font-size: 10px; text-transform: uppercase; letter-spacing: .14em; }
@@ -291,6 +298,9 @@ dialog::backdrop { background: rgba(0,0,0,.74); backdrop-filter: blur(4px); }
   font-weight: 700; letter-spacing: .14em; transition: background .2s, border-color .2s;
 }
 .share-primary:hover { background: var(--orange); border-color: var(--orange); }
+.share-primary + .share-primary { margin-top: 8px; }
+.share-instagram-primary { border-color: var(--orange); background: var(--orange); }
+.share-instagram-primary:hover { border-color: var(--ink); background: var(--ink); }
 .share-primary[hidden] { display: none; }
 .share-secondary { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
 .share-secondary button {

@@ -54,7 +54,7 @@ The project includes the technical foundations needed for search engines, social
 - A descriptive page title and search snippet
 - Canonical URLs for the home and accessibility pages
 - Open Graph and social-card metadata
-- A privacy-conscious 1080 × 1350 result-card generator with native image-and-caption sharing on supported devices, image download, copyable caption text, social composer links, and a scannable link back to the study
+- A privacy-conscious 1080 × 1350 result-card generator with an Instagram-first workflow, native image-and-caption sharing on supported devices, image download, copyable caption text, social composer links, and a scannable link back to the study
 - JSON-LD describing LoveRace as both a website and a free web application
 - `robots.txt` and an XML sitemap using absolute canonical URLs
 - A web app manifest, favicon, Apple touch icon, and custom 404 page
@@ -103,8 +103,8 @@ The 20%, 50%, and 80% timelines solve the final equation for `n`. Encounters are
 - **Relationship availability:** the proportion likely to be single and open to a relationship is an adjustable 38% starting assumption, not an age- or country-specific estimate. [UN World Marriage Data](https://www.un.org/development/desa/pd/node/3593) shows marital status by age and sex across 232 countries or areas, while the [OECD Family Database](https://www.oecd.org/en/data/datasets/oecd-family-database.html) documents differences in marriage, divorce, cohabitation, and partnership definitions.
 - **Religion and background:** religion uses broad global shares; cultural-background categories are coarse regional proxies and do not represent a complete ethnicity census.
 - **Income:** the selected minimum is modeled against GDP per capita for the chosen geography using a broad income-distribution approximation.
-- **Lifestyle and family preferences:** these use adjustable population-wide proxies rather than individualized survey estimates.
-- **Weekly interactions:** users choose how many genuinely new people they meet, how locally relevant those encounters are, and the assumed probability of a meaningful mutual connection with an otherwise eligible person.
+- **Lifestyle and family preferences:** the non-smoker option uses 2022 CDC U.S. current-cigarette-smoking rates of 10.1% for women and 13.1% for men, with the overall 11.6% rate as a limited fallback for nonbinary selections. This U.S. proxy is currently used regardless of selected geography. The children and long-term-relationship options remain broad population-wide proxies.
+- **Weekly interactions:** users choose how many genuinely new people they meet, how locally relevant those encounters are, and the assumed probability of a meaningful mutual connection with an otherwise eligible person. These inputs change the probability timelines, not the eligible partner-pool count.
 
 ## Reciprocal dating-openness evidence
 
@@ -128,6 +128,7 @@ No single high-quality global dataset measures every combination of gender ident
 | [Blair & Hoskin, *Transgender exclusion from the world of dating*](https://doi.org/10.1177/0265407518779139) | Stated willingness to date trans people | N=958; predominantly Canadian and American; mean age 25.5 |
 | [2015 U.S. Transgender Survey](https://transequality.org/sites/default/files/docs/usts/USTS-Full-Report-Dec17.pdf) | Trans respondents' orientation distribution | N=27,715; large U.S. convenience sample, not a direct dating-willingness measure |
 | [World Bank GDP per capita](https://data.worldbank.org/indicator/NY.GDP.PCAP.CD) | Income-model calibration | GDP per capita is not the same as an individual's income |
+| [CDC, U.S. adult cigarette smoking, 2022](https://www.cdc.gov/tobacco/campaign/tips/resources/data/cigarette-smoking-in-united-states.html) | Non-smoker estimate by gender | Official U.S. proxy used regardless of selected geography; overall rate is the nonbinary fallback |
 
 ## Modeling note and important limitations
 

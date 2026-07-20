@@ -26,7 +26,7 @@
   <meta name="twitter:description" content="Explore how geography, demographics, preferences, and new encounters shape the probability of meeting a compatible partner." />
   <meta name="twitter:image" content="https://raceto.love/assets/social-preview.png" />
   <meta name="twitter:image:alt" content="LoveRace asks: How many people could be your person?" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20260719d" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -115,7 +115,7 @@
           <section class="step" data-step="1">
             <div class="eyebrow">Desire, without assumptions</div>
             <h2>Tell us about you.</h2>
-            <p class="step-deck">Your identity determines which partner-preference research applies to the people you select next.</p>
+            <p class="step-deck">Your identity helps suggest a starting partner selection and determines which partner-preference research applies. You can change every suggestion on the next page.</p>
             <fieldset>
               <legend>I describe my gender as</legend>
               <div class="option-grid" id="selfGender">
@@ -261,6 +261,7 @@
                 <label><input type="checkbox" id="nonSmoker" /><span>Non-smoker</span></label>
                 <label><input type="checkbox" id="longTerm" /><span>Seeking long-term</span></label>
               </div>
+              <small class="field-caveat">The non-smoker estimate uses 2022 U.S. current-cigarette-smoking rates: 10.1% for women and 13.1% for men. The U.S. overall rate is used as a limited fallback for nonbinary selections. <a href="https://www.cdc.gov/tobacco/campaign/tips/resources/data/cigarette-smoking-in-united-states.html" target="_blank" rel="noreferrer">CDC smoking data ↗</a></small>
             </fieldset>
           </section>
 
@@ -281,6 +282,14 @@
               <label for="spark">Chance of a meaningful mutual connection with an eligible person</label>
               <div class="slider-line"><input id="spark" type="range" min="1" max="20" value="4" aria-describedby="sparkOutput sparkNote" /><output id="sparkOutput">4%</output></div>
               <small id="sparkNote">This is the most personal assumption in the model. Try 2–8% to see a realistic range.</small>
+            </div>
+            <div class="inline-odds" aria-label="Live probability timeline">
+              <p>These three settings change the timeline below, not the number of potential people.</p>
+              <div>
+                <span><b>20%</b><output id="inlineChance20">Calculating…</output></span>
+                <span><b>50%</b><output id="inlineChance50">Calculating…</output></span>
+                <span><b>80%</b><output id="inlineChance80">Calculating…</output></span>
+              </div>
             </div>
           </section>
         </form>
@@ -350,7 +359,8 @@
         <div class="eyebrow">Your result, told at a glance</div>
         <h2 id="shareTitle">Show them<br /><em>your odds.</em></h2>
         <p id="shareDescription">The card explains how many people worldwide could match what you are looking for, how many new people you meet, and how your chance of finding love builds over time. Your private selections are not shown.</p>
-        <button class="share-primary" id="nativeShare" type="button" hidden><span>Share image + caption</span><span aria-hidden="true">↗</span></button>
+        <button class="share-primary share-instagram-primary" id="shareInstagram" type="button" data-native-share="false"><span>Instagram</span><span aria-hidden="true">↗</span></button>
+        <button class="share-primary share-more-apps" id="nativeShare" type="button" hidden><span>More sharing apps</span><span aria-hidden="true">↗</span></button>
         <div class="share-secondary">
           <button id="downloadShare" type="button">Download card</button>
           <button id="copyShare" type="button">Copy caption</button>
@@ -390,7 +400,8 @@
         <ul class="method-list">
           <li><strong>Filters are treated as independent.</strong> In reality, age, country, income, religion, background, orientation, relationship status, gender identity, and family preferences influence one another. Multiplying separate population shares can make the combined pool too large or too small.</li>
           <li><strong>Several inputs are broad defaults.</strong> The 38% relationship-availability value is not calculated from age or country. Background categories can overlap even though their shares are added, and the current categories total 98%. Gender population shares are assumptions because no consistent worldwide measurement exists.</li>
-          <li><strong>Orientation and dating openness are separate ideas.</strong> The user's orientation answer is descriptive; selected partner genders drive the reciprocal dating-openness calculation. Estimates involving trans and nonbinary people rely on geographically limited studies and are marked as limited evidence.</li>
+          <li><strong>Orientation and dating openness are separate ideas.</strong> The user's orientation suggests an initial partner-gender selection, which the user can override. The selected partner genders drive the reciprocal dating-openness calculation. Estimates involving trans and nonbinary people rely on geographically limited studies and are marked as limited evidence.</li>
+          <li><strong>The non-smoker estimate is U.S.-based.</strong> It uses 2022 CDC current-cigarette-smoking rates of 10.1% for women and 13.1% for men. The overall 11.6% rate is a limited fallback for nonbinary selections, and the U.S. proxy is currently used even when another geography is selected.</li>
           <li><strong>The range is not a confidence interval.</strong> It is a sensitivity cue that broadens as assumptions are added. Meeting a filter also does not establish chemistry, timing, emotional availability, safety, reciprocal effort, or compatibility.</li>
         </ul>
         <h3>Data sources</h3>
@@ -405,11 +416,12 @@
           <li><a href="https://doi.org/10.1177/0265407518779139" target="_blank" rel="noreferrer">Blair & Hoskin: Transgender exclusion from dating</a><span>Stated dating choices, N=958</span></li>
           <li><a href="https://transequality.org/sites/default/files/docs/usts/USTS-Full-Report-Dec17.pdf" target="_blank" rel="noreferrer">2015 U.S. Transgender Survey</a><span>Trans respondents’ orientation distribution, N=27,715</span></li>
           <li><a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CD" target="_blank" rel="noreferrer">World Bank: GDP per capita</a><span>Income-model calibration</span></li>
+          <li><a href="https://www.cdc.gov/tobacco/campaign/tips/resources/data/cigarette-smoking-in-united-states.html" target="_blank" rel="noreferrer">CDC: U.S. adult cigarette smoking, 2022</a><span>Non-smoker estimate by gender; official U.S. proxy</span></li>
         </ul>
       </div>
     </div>
   </dialog>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=20260719d"></script>
 </body>
 </html>

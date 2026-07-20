@@ -10,6 +10,13 @@ const GENDER_SHARES = Object.freeze({
   transMen: .0035,
   nonbinary: .012,
 });
+const US_CURRENT_CIGARETTE_SMOKING = Object.freeze({
+  alignedWomen: .101,
+  transWomen: .101,
+  alignedMen: .131,
+  transMen: .131,
+  nonbinary: .116,
+});
 const SELF_LABELS = Object.freeze({
   alignedWoman: 'gender-aligned woman', transWoman: 'trans woman', alignedMan: 'gender-aligned man', transMan: 'trans man',
   nonbinary: 'nonbinary person', skip: 'person whose gender was not provided',
@@ -30,6 +37,7 @@ const state = {
   basePopulation: FALLBACK_WORLD,
   researchEstimate: null,
   reciprocalCustomized: false,
+  partnerCustomized: false,
 };
 
 const fmt = new Intl.NumberFormat('en-US');
@@ -124,6 +132,40 @@ function genderFactor() {
   const genders = checkedValues('partnerGender');
   if (!genders.length) return 0;
   return Math.min(1, genders.reduce((sum, gender) => sum + (GENDER_SHARES[gender] || 0), 0));
+}
+
+function suggestedPartnerGenders() {
+  const self = selectedValue('selfGender');
+  const orientation = selectedValue('orientation');
+  const selfIsWoman = self === 'alignedWoman' || self === 'transWoman';
+  const selfIsMan = self === 'alignedMan' || self === 'transMan';
+  if (orientation === 'straight' && selfIsWoman) return ['alignedMen'];
+  if (orientation === 'straight' && selfIsMan) return ['alignedWomen'];
+  if (orientation === 'gay' && selfIsWoman) return ['alignedWomen'];
+  if (orientation === 'gay' && selfIsMan) return ['alignedMen'];
+  if (orientation === 'bi' || orientation === 'queer' || self === 'nonbinary') return ['alignedWomen', 'alignedMen'];
+  return checkedValues('partnerGender');
+}
+
+function syncPartnerDefaults() {
+  if (state.partnerCustomized) return;
+  const suggested = suggestedPartnerGenders();
+  $$('input[name="partnerGender"]').forEach(input => {
+    input.checked = suggested.includes(input.value);
+  });
+}
+
+function nonSmokerFactor() {
+  const partners = checkedValues('partnerGender');
+  if (!partners.length) return 1 - US_CURRENT_CIGARETTE_SMOKING.nonbinary;
+  const weighted = partners.map(partner => ({
+    weight: GENDER_SHARES[partner] || 0,
+    nonSmokerShare: 1 - (US_CURRENT_CIGARETTE_SMOKING[partner] || US_CURRENT_CIGARETTE_SMOKING.nonbinary),
+  }));
+  const totalWeight = weighted.reduce((sum, item) => sum + item.weight, 0);
+  return totalWeight
+    ? weighted.reduce((sum, item) => sum + item.nonSmokerShare * item.weight, 0) / totalWeight
+    : 1 - US_CURRENT_CIGARETTE_SMOKING.nonbinary;
 }
 
 function multiSelectFactor(name) {
@@ -276,7 +318,7 @@ function calculateModel() {
     { key: multiSelectLabel('backgroundChoice', 'Background open', 'backgrounds'), value: backgroundFactor, show: state.step >= 4 && backgroundFactor < 1 },
     { key: Number($('#income').value) ? `Income ≥ ${money(Number($('#income').value))}` : 'Income open', value: incomeShare(Number($('#income').value)), show: state.step >= 5 && Number($('#income').value) > 0 },
     { key: 'Children preference', value: Number(selectedValue('kids')), show: state.step >= 5 && Number(selectedValue('kids')) < 1 },
-    { key: 'Non-smoker', value: $('#nonSmoker').checked ? .78 : 1, show: state.step >= 5 && $('#nonSmoker').checked },
+    { key: 'Non-smoker (U.S. gender estimate)', value: $('#nonSmoker').checked ? nonSmokerFactor() : 1, show: state.step >= 5 && $('#nonSmoker').checked },
     { key: 'Seeking long-term', value: $('#longTerm').checked ? .58 : 1, show: state.step >= 5 && $('#longTerm').checked },
   ];
   const activeFactors = factors.filter(f => f.show);
@@ -343,7 +385,9 @@ function renderOdds(model) {
   const weekly = 1 - Math.pow(1 - perEncounter, interactions);
   [20,50,80].forEach(target => {
     const weeks = Math.log(1-target/100) / Math.log(1-weekly);
-    $(`#chance${target}`).textContent = formatDuration(weeks);
+    const duration = formatDuration(weeks);
+    $(`#chance${target}`).textContent = duration;
+    $(`#inlineChance${target}`).textContent = duration;
   });
   $('#oddsFootnote').textContent = `${interactions} new people/week · ${(eligibleShare*100).toFixed(eligibleShare < .01 ? 3 : 1)}% meet modeled filters · ${Math.round(relevance*100)}% locally relevant · ${Math.round(spark*100)}% connection assumption. Encounters are treated as independent.`;
   if ($('#shareDialog').open) renderShareCard().catch(() => {
@@ -352,12 +396,14 @@ function renderOdds(model) {
 }
 
 function formatDuration(weeks) {
-  if (!Number.isFinite(weeks) || weeks > 5200) return '100+ years';
+  if (!Number.isFinite(weeks)) return 'not reached';
   if (weeks < 1) return '< 1 week';
   if (weeks < 8) return `${Math.ceil(weeks)} weeks`;
   const months = weeks / 4.345;
   if (months < 24) return `${months.toFixed(months < 10 ? 1 : 0)} months`;
   const years = weeks / 52.1429;
+  if (years >= 1000) return `${compactFmt.format(years)} years`;
+  if (years >= 10) return `${fmt.format(Math.round(years))} years`;
   return `${years.toFixed(years < 10 ? 1 : 0)} years`;
 }
 
@@ -571,6 +617,21 @@ async function nativeShareCard() {
   }
 }
 
+async function shareToInstagram() {
+  const button = $('#shareInstagram');
+  if (button.dataset.nativeShare === 'true') {
+    $('#shareStatus').textContent = 'Choose Instagram from your device’s share menu.';
+    await nativeShareCard();
+    return;
+  }
+
+  window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer');
+  $('#shareStatus').textContent = 'Preparing the card and caption for Instagram…';
+  await downloadShareCard();
+  await copyShareText();
+  $('#shareStatus').textContent = 'Card downloaded and caption copied. Add both to your Instagram post.';
+}
+
 async function updateNativeShareOption() {
   const button = $('#nativeShare');
   let canShareImage = false;
@@ -582,9 +643,10 @@ async function updateNativeShareOption() {
     canShareImage = false;
   }
   button.hidden = !canShareImage;
+  $('#shareInstagram').dataset.nativeShare = String(canShareImage);
   $('#shareAvailability').textContent = canShareImage
-    ? 'Your device can send the image and caption together to compatible installed apps. Instagram may appear when its app is installed.'
-    : 'Download the card to attach it to a post. The social links open a composer with your caption and the LoveRace link already filled in.';
+    ? 'Tap Instagram first, then choose Instagram from your device’s share menu. The image and caption are sent together to compatible installed apps.'
+    : 'Instagram downloads the card, copies its caption, and opens Instagram for you to attach it. The other links open with the caption and LoveRace link filled in.';
 }
 
 function money(value) {
@@ -725,6 +787,9 @@ function bindEvents() {
     }
   });
   $('#nativeShare').addEventListener('click', nativeShareCard);
+  $('#shareInstagram').addEventListener('click', () => shareToInstagram().catch(() => {
+    $('#shareStatus').textContent = 'Instagram sharing was not available. Download the card and copy its caption instead.';
+  }));
   $('#downloadShare').addEventListener('click', () => downloadShareCard().catch(() => {
     $('#shareStatus').textContent = 'The image could not be downloaded. Please try again.';
   }));
@@ -769,6 +834,8 @@ function bindEvents() {
   $('#selectWorld').addEventListener('click', () => { state.selectedCountries = []; renderSelectedCountries(); recalculate(true); });
   $$('input, select', $('#studyForm')).forEach(input => input.addEventListener('input', () => {
     if (input.matches('[name="religionChoice"], [name="backgroundChoice"]')) normalizeMultiSelect(input);
+    if (input.matches('[name="partnerGender"]')) state.partnerCustomized = true;
+    if (input.matches('[name="selfGender"], [name="orientation"]') && state.step <= 1) syncPartnerDefaults();
     if (input.matches('[name="selfGender"], [name="orientation"], [name="partnerGender"]') && state.step <= 2) syncOrientationDefault();
     if (input.id === 'orientationRate') {
       state.reciprocalCustomized = true;
@@ -809,8 +876,10 @@ function updateOutputs() {
 function resetStudy() {
   $('#studyForm').reset();
   state.selectedCountries = [];
+  state.partnerCustomized = false;
   renderSelectedCountries();
   updateMultiSelectSummaries();
+  syncPartnerDefaults();
   syncOrientationDefault();
   updateOutputs();
   showStep(0);
@@ -818,6 +887,7 @@ function resetStudy() {
 
 bindEvents();
 updateMultiSelectSummaries();
+syncPartnerDefaults();
 syncOrientationDefault();
 updateOutputs();
 fetchWorldData().then(animateCounter);
