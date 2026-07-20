@@ -674,6 +674,8 @@ function showStep(nextStep) {
   $('#progressTrack').setAttribute('aria-valuenow', String(state.step + 1));
   $('#progressTrack').setAttribute('aria-valuetext', `Step ${state.step + 1} of 7`);
   $('#backButton').style.visibility = state.step ? 'visible' : 'hidden';
+  $('#seeResultsButton').hidden = state.step !== 6;
+  $('.step-actions').classList.toggle('is-final', state.step === 6);
   $('#nextButton span:first-child').textContent = state.step === 6 ? 'Share your results' : 'Continue';
   $('#nextButton span:last-child').textContent = state.step === 6 ? '↗' : '→';
   if (state.step < 6) $('#oddsPanel').classList.remove('visible');
@@ -782,6 +784,11 @@ function bindEvents() {
   $('#nextButton').addEventListener('click', () => state.step === 6
     ? $('#openShare').click()
     : showStep(state.step + 1));
+  $('#seeResultsButton').addEventListener('click', () => {
+    recalculate(true);
+    scrollToElement($('#oddsPanel'), 'center');
+    focusElement($('#oddsHeading'));
+  });
   $('#adjustInputs').addEventListener('click', () => {
     scrollToElement($('.final-step'));
     focusElement($('.final-step h2'));

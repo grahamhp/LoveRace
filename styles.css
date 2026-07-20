@@ -204,6 +204,10 @@ select { width: 100%; border: 0; border-bottom: 1px solid var(--ink); background
 .hero-setting input { max-width: 500px; }
 .step-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); padding-top: 22px; }
 .back-button { border: 0; background: none; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; visibility: hidden; }
+.step-action-buttons { display: flex; gap: 8px; }
+.see-results-button { min-width: 180px; border: 1px solid var(--ink); background: transparent; color: var(--ink); padding: 15px 17px; display: flex; justify-content: space-between; cursor: pointer; font-size: 10px; text-transform: uppercase; letter-spacing: .14em; }
+.see-results-button:hover { border-color: var(--orange); color: var(--orange); }
+.see-results-button[hidden] { display: none; }
 .next-button { min-width: 180px; border: 1px solid var(--ink); background: var(--ink); color: white; padding: 15px 17px; display: flex; justify-content: space-between; cursor: pointer; font-size: 10px; text-transform: uppercase; letter-spacing: .14em; }
 .next-button:hover { background: var(--orange); border-color: var(--orange); }
 
@@ -348,6 +352,10 @@ dialog::backdrop { background: rgba(0,0,0,.74); backdrop-filter: blur(4px); }
   .intro { padding: 8vh 22px; }.intro h1 { font-size: 58px; }.intro-copy { font-size: 17px; }
   .result-panel { padding: 25px 20px; min-height: 620px; }.population-number { font-size: 45px; }
   .question-panel { padding: 25px 20px; }.step { padding: 55px 0 30px; }.step h2 { font-size: 46px; }
+  .step-actions.is-final { align-items: stretch; flex-direction: column; gap: 14px; }
+  .step-actions.is-final .back-button { align-self: flex-start; }
+  .step-actions.is-final .step-action-buttons { width: 100%; flex-direction: column; }
+  .step-actions.is-final .see-results-button, .step-actions.is-final .next-button { width: 100%; min-width: 0; }
   .option-grid { grid-template-columns: 1fr; }.age-display { font-size: 70px; }
   .estimate-sources { grid-template-columns: 1fr; }.estimate-definition { grid-template-columns: 1fr; gap: 5px; }
   .dialog-content { padding: 30px 22px; }.dialog-content h2 { font-size: 48px; }
