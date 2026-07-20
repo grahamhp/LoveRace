@@ -23,7 +23,7 @@ Codex and GPT-5.6 were used to:
 
 One representative collaboration involved reciprocal dating openness. Graham challenged an early broad estimate and asked a concrete question: if a trans woman is looking for gender-aligned men, what share might actually include her in their dating pool? GPT-5.6 helped locate and compare relevant evidence, derive a clearly labeled low-confidence proxy, connect it to the appropriate user and partner identities, and rewrite the interface so the estimate and its source were understandable. Graham reviewed the result and guided how it should be framed.
 
-Another example involved the site's original population visualization. Graham found the colored-circle graphic creative but difficult to interpret. Codex helped reconceptualize it as an "Equivalent population density" display with a clearer 1-in-X explanation, a proportion bar, and a filter ledger while preserving the site's fashion-editorial and modern-art aesthetic.
+Another example involved the site's original population visualization. Graham found the colored-circle graphic creative but difficult to interpret. Codex helped reconceptualize it as an "Equivalent population density" display with a clearer 1-in-X explanation and a restrained proportion bar, while preserving the site's fashion-editorial and modern-art aesthetic.
 
 The result reflects a human-led, AI-assisted process. Codex and GPT-5.6 expanded what was technically and analytically possible, but the project's purpose, critiques, revisions, and final choices remained directed by Graham.
 
