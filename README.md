@@ -177,3 +177,7 @@ Other limitations include:
 - The model does not know whether a user will change their behavior after seeing the result. Meeting more people, changing geography, or adjusting preferences changes the process itself.
 
 The result is best read as a scenario: **given these population assumptions and this encounter rate, what does the probability model imply?** It is a tool for understanding scale and tradeoffs, not a verdict about anyone's future.
+
+## License
+
+The original LoveRace source code is available under the [MIT License](LICENSE). Third-party data, research, trademarks, and linked materials remain subject to their respective owners' terms.
