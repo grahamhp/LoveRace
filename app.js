@@ -371,11 +371,9 @@ function formatRatio(ratio) {
 
 function shareSnapshot() {
   const model = calculateModel();
-  const ratio = model.product > 0 ? 1 / model.product : Infinity;
   return {
     pool: model.pool,
     poolShort: compactFmt.format(model.pool),
-    ratio: formatRatio(ratio),
     chance20: $('#chance20').textContent,
     chance50: $('#chance50').textContent,
     chance80: $('#chance80').textContent,
@@ -384,7 +382,7 @@ function shareSnapshot() {
 }
 
 function shareText(snapshot = shareSnapshot()) {
-  return `My LoveRace estimate found ${snapshot.poolShort} potential people. At ${snapshot.interactions} new people a week, the model reaches a 50% chance in ${snapshot.chance50}. Run your own probability study: ${SHARE_URL}`;
+  return `LoveRace estimates ${snapshot.poolShort} people worldwide could be a match for me. I meet about ${snapshot.interactions} new people a week, so my chance of finding love reaches 20% in ${snapshot.chance20}, 50% in ${snapshot.chance50}, and 80% in ${snapshot.chance80}. What are your odds? ${SHARE_URL}`;
 }
 
 function loadShareImage(src) {
@@ -432,51 +430,37 @@ async function renderShareCard() {
   context.fillStyle = '#f8f6f1';
   context.fillRect(0, 0, canvas.width, canvas.height);
 
-  context.drawImage(logo, 135, 865, 1000, 180, 68, 58, 390, 70);
+  context.drawImage(logo, 145, 210, 970, 820, 56, 36, 345, 292);
   context.fillStyle = '#68675f';
-  context.font = '700 14px Arial';
-  drawTrackingText(context, 'A PROBABILITY STUDY OF HUMAN CONNECTION', 578, 94, 1.8);
+  context.font = '700 13px Arial';
+  drawTrackingText(context, 'A PROBABILITY STUDY OF HUMAN CONNECTION', 575, 89, 1.6);
   context.fillStyle = 'rgba(17,17,15,.22)';
-  context.fillRect(68, 157, 944, 2);
-
-  const dotColors = ['#ff583d', '#11110f', '#11110f', '#11110f', '#11110f', '#d8ff3e'];
-  dotColors.forEach((color, index) => {
-    context.beginPath();
-    context.fillStyle = color;
-    context.arc(75 + index * 34, 220 + index * 18, index === 5 ? 10 : 7, 0, Math.PI * 2);
-    context.fill();
-  });
+  context.fillRect(56, 340, 968, 2);
 
   context.fillStyle = '#11110f';
-  context.font = '700 18px Arial';
-  drawTrackingText(context, 'MY MODELED PARTNER POOL', 68, 315, 4.2);
+  context.font = '700 17px Arial';
+  drawTrackingText(context, 'BASED ON MY PREFERENCES AND CIRCUMSTANCES', 68, 402, 3.1);
 
   const poolLabel = snapshot.poolShort.toUpperCase();
-  const poolSize = fitCanvasText(context, poolLabel, 940, 230, 118, 'Arial', 760);
+  const poolSize = fitCanvasText(context, poolLabel, 940, 210, 116, 'Arial', 760);
   context.font = `760 ${poolSize}px Arial`;
   context.letterSpacing = '-8px';
-  context.fillText(poolLabel, 58, 525);
+  context.fillText(poolLabel, 58, 600);
   context.letterSpacing = '0px';
 
   context.fillStyle = '#ff583d';
-  context.font = 'italic 48px Georgia';
-  context.fillText('potential people', 72, 590);
-  context.fillStyle = '#68675f';
-  context.font = '24px Georgia';
-  context.fillText(`${fmt.format(snapshot.pool)} in this scenario`, 72, 642);
-  context.fillStyle = '#11110f';
-  context.font = '700 22px Arial';
-  context.fillText(snapshot.ratio === '1' ? 'BEFORE FILTERING, EVERYONE IS INCLUDED.' : `ABOUT 1 IN ${snapshot.ratio} PEOPLE MEETS THE MODELED FILTERS.`, 72, 698);
+  context.font = 'italic 43px Georgia';
+  context.fillText('people worldwide could be a match for me.', 72, 674);
 
   context.fillStyle = '#11110f';
-  context.fillRect(0, 758, 1080, 592);
+  context.fillRect(0, 738, 1080, 612);
   context.fillStyle = '#d8ff3e';
-  context.fillRect(0, 758, 16, 592);
+  context.fillRect(0, 738, 16, 612);
   context.font = '700 17px Arial';
-  drawTrackingText(context, `AT ${snapshot.interactions} NEW PEOPLE EACH WEEK`, 72, 825, 3.5);
+  drawTrackingText(context, `I MEET ABOUT ${snapshot.interactions} NEW PEOPLE EACH WEEK`, 72, 807, 3.1);
   context.fillStyle = '#f8f6f1';
   context.font = 'italic 39px Georgia';
-  context.fillText('The estimated chance reaches…', 72, 883);
+  context.fillText('My chance of finding love reaches…', 72, 869);
 
   const milestones = [
     ['20%', snapshot.chance20],
@@ -487,33 +471,33 @@ async function renderShareCard() {
     const x = 72 + index * 312;
     if (index) {
       context.fillStyle = '#383834';
-      context.fillRect(x - 25, 930, 2, 155);
+      context.fillRect(x - 25, 914, 2, 168);
     }
     context.fillStyle = '#ff583d';
     context.font = '400 58px Georgia';
-    context.fillText(chance, x, 990);
-    context.fillStyle = '#f8f6f1';
-    fitCanvasText(context, duration, 260, 42, 26, 'Arial', 700);
-    context.fillText(duration, x, 1047);
+    context.fillText(chance, x, 970);
     context.fillStyle = '#9f9f98';
-    context.font = '700 15px Arial';
-    drawTrackingText(context, 'FROM NOW', x, 1081, 2.5);
+    context.font = '700 14px Arial';
+    drawTrackingText(context, 'CHANCE IN', x, 1008, 2.2);
+    context.fillStyle = '#f8f6f1';
+    const durationSize = fitCanvasText(context, duration, 260, 39, 25, 'Arial', 700);
+    context.font = `700 ${durationSize}px Arial`;
+    context.fillText(duration, x, 1053);
   });
 
   context.fillStyle = '#383834';
-  context.fillRect(72, 1134, 936, 2);
-  context.drawImage(qr, 834, 1162, 150, 150);
+  context.fillRect(72, 1115, 936, 2);
+  context.drawImage(qr, 834, 1144, 150, 150);
   context.fillStyle = '#f8f6f1';
   context.font = '700 30px Arial';
-  context.fillText('RACETO.LOVE', 72, 1205);
+  context.fillText('RACETO.LOVE', 72, 1193);
   context.fillStyle = '#9f9f98';
-  context.font = '18px Georgia';
-  context.fillText('Run your own probability study.', 72, 1243);
+  context.font = 'italic 19px Georgia';
+  context.fillText('What are your odds?', 72, 1234);
   context.font = '15px Arial';
-  context.fillText('Exploratory model, not a prediction.', 72, 1287);
-  context.fillText('Scan to begin', 834, 1330);
+  context.fillText('Scan to find yours', 834, 1317);
 
-  canvas.setAttribute('aria-label', `LoveRace result card. Estimated partner pool: ${fmt.format(snapshot.pool)} people. Twenty percent chance in ${snapshot.chance20}, 50 percent in ${snapshot.chance50}, and 80 percent in ${snapshot.chance80}.`);
+  canvas.setAttribute('aria-label', `LoveRace result card. Based on my preferences and circumstances, ${fmt.format(snapshot.pool)} people worldwide could be a match for me. I meet about ${snapshot.interactions} new people each week. My chance of finding love reaches 20 percent in ${snapshot.chance20}, 50 percent in ${snapshot.chance50}, and 80 percent in ${snapshot.chance80}.`);
   updateShareLinks(snapshot);
   return canvas;
 }
@@ -523,6 +507,7 @@ function updateShareLinks(snapshot = shareSnapshot()) {
   $('#shareWhatsApp').href = `https://wa.me/?text=${encodeURIComponent(text)}`;
   $('#shareFacebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}&quote=${encodeURIComponent(text)}`;
   $('#shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+  $('#shareBluesky').href = `https://bsky.app/intent/compose?text=${encodeURIComponent(text)}`;
   $('#shareEmail').href = `mailto:?subject=${encodeURIComponent('My LoveRace result')}&body=${encodeURIComponent(text)}`;
 }
 
@@ -565,7 +550,7 @@ async function copyShareText() {
     field.remove();
   }
   if (!copied) throw new Error('Clipboard access was not available.');
-  $('#shareStatus').textContent = 'Result and link copied.';
+  $('#shareStatus').textContent = 'Caption copied.';
 }
 
 async function nativeShareCard() {
@@ -578,16 +563,28 @@ async function nativeShareCard() {
     if (navigator.share && navigator.canShare?.({ files: [file] })) {
       await navigator.share({ title: 'My LoveRace result', text, files: [file] });
       $('#shareStatus').textContent = 'Card shared.';
-    } else if (navigator.share) {
-      await navigator.share({ title: 'My LoveRace result', text, url: SHARE_URL });
-      $('#shareStatus').textContent = 'Link shared. Download the image to attach the card.';
     } else {
-      await downloadShareCard();
-      $('#shareStatus').textContent = 'Your browser cannot open an app chooser, so the card was downloaded.';
+      $('#shareStatus').textContent = 'Image sharing is not supported in this browser. Download the card and attach it to a post.';
     }
   } catch (error) {
     $('#shareStatus').textContent = error.name === 'AbortError' ? 'Sharing canceled.' : 'Sharing was not available. Try downloading the image.';
   }
+}
+
+async function updateNativeShareOption() {
+  const button = $('#nativeShare');
+  let canShareImage = false;
+  try {
+    const blob = await shareCanvasBlob();
+    const file = new File([blob], 'my-loverace-result.png', { type: 'image/png' });
+    canShareImage = Boolean(navigator.share && navigator.canShare?.({ files: [file] }));
+  } catch (error) {
+    canShareImage = false;
+  }
+  button.hidden = !canShareImage;
+  $('#shareAvailability').textContent = canShareImage
+    ? 'Your device can send the image and caption together to compatible installed apps. Instagram may appear when its app is installed.'
+    : 'Download the card to attach it to a post. The social links open a composer with your caption and the LoveRace link already filled in.';
 }
 
 function money(value) {
@@ -720,6 +717,7 @@ function bindEvents() {
     $('#shareDialog').scrollTop = 0;
     try {
       await renderShareCard();
+      await updateNativeShareOption();
       $('#shareStatus').textContent = '';
     } catch (error) {
       console.error('Could not render the sharing card.', error);
@@ -731,7 +729,7 @@ function bindEvents() {
     $('#shareStatus').textContent = 'The image could not be downloaded. Please try again.';
   }));
   $('#copyShare').addEventListener('click', () => copyShareText().catch(() => {
-    $('#shareStatus').textContent = 'Copying was not available. Try one of the quick sharing links.';
+    $('#shareStatus').textContent = 'Copying was not available. Try one of the social links.';
   }));
   $('#closeShare').addEventListener('click', () => $('#shareDialog').close());
   $('#shareDialog').addEventListener('click', event => { if (event.target === $('#shareDialog')) $('#shareDialog').close(); });

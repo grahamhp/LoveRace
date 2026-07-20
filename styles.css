@@ -291,6 +291,7 @@ dialog::backdrop { background: rgba(0,0,0,.74); backdrop-filter: blur(4px); }
   font-weight: 700; letter-spacing: .14em; transition: background .2s, border-color .2s;
 }
 .share-primary:hover { background: var(--orange); border-color: var(--orange); }
+.share-primary[hidden] { display: none; }
 .share-secondary { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
 .share-secondary button {
   border: 1px solid var(--ink); background: transparent; padding: 13px 10px; cursor: pointer; text-transform: uppercase;

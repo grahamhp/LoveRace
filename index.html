@@ -347,24 +347,25 @@
         <figcaption>Your personal selections are not shown on the card.</figcaption>
       </figure>
       <div class="share-controls">
-        <div class="eyebrow">Turn probability into conversation</div>
-        <h2 id="shareTitle">Put your odds<br /><em>into the world.</em></h2>
-        <p id="shareDescription">Share a portrait result card through an app on your device, or download it for any social platform. The card includes your modeled pool and timeline, but not your gender, orientation, religion, background, income preferences, or country selections.</p>
-        <button class="share-primary" id="nativeShare" type="button"><span>Choose an app</span><span aria-hidden="true">↗</span></button>
+        <div class="eyebrow">Your result, told at a glance</div>
+        <h2 id="shareTitle">Show them<br /><em>your odds.</em></h2>
+        <p id="shareDescription">The card explains how many people worldwide could match what you are looking for, how many new people you meet, and how your chance of finding love builds over time. Your private selections are not shown.</p>
+        <button class="share-primary" id="nativeShare" type="button" hidden><span>Share image + caption</span><span aria-hidden="true">↗</span></button>
         <div class="share-secondary">
-          <button id="downloadShare" type="button">Download image</button>
-          <button id="copyShare" type="button">Copy result and link</button>
+          <button id="downloadShare" type="button">Download card</button>
+          <button id="copyShare" type="button">Copy caption</button>
         </div>
         <div class="share-quick-links" aria-labelledby="quickShareLabel">
-          <span id="quickShareLabel">Quick link sharing</span>
+          <span id="quickShareLabel">Open a captioned post</span>
           <div>
+            <a id="shareX" href="#" target="_blank" rel="noreferrer">X</a>
+            <a id="shareBluesky" href="#" target="_blank" rel="noreferrer">Bluesky</a>
             <a id="shareWhatsApp" href="#" target="_blank" rel="noreferrer">WhatsApp</a>
             <a id="shareFacebook" href="#" target="_blank" rel="noreferrer">Facebook</a>
-            <a id="shareX" href="#" target="_blank" rel="noreferrer">X</a>
             <a id="shareEmail" href="#">Email</a>
           </div>
         </div>
-        <p class="share-note">App availability depends on your device. Quick links share the website and result text; use “Choose an app” or download the image to include the card.</p>
+        <p class="share-note" id="shareAvailability">Checking which sharing options this browser supports…</p>
         <p class="share-status" id="shareStatus" role="status" aria-live="polite"></p>
       </div>
     </div>

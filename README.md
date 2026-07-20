@@ -54,7 +54,7 @@ The project includes the technical foundations needed for search engines, social
 - A descriptive page title and search snippet
 - Canonical URLs for the home and accessibility pages
 - Open Graph and social-card metadata
-- A privacy-conscious 1080 × 1350 result-card generator with native app sharing, image download, copyable result text, quick sharing links, and a scannable link back to the study
+- A privacy-conscious 1080 × 1350 result-card generator with native image-and-caption sharing on supported devices, image download, copyable caption text, social composer links, and a scannable link back to the study
 - JSON-LD describing LoveRace as both a website and a free web application
 - `robots.txt` and an XML sitemap using absolute canonical URLs
 - A web app manifest, favicon, Apple touch icon, and custom 404 page
