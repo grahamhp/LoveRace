@@ -101,10 +101,37 @@ The 20%, 50%, and 80% timelines solve the final equation for `n`. Encounters are
 - **Reciprocal dating openness:** the model estimates the share of the selected partner group whose reported orientation or dating choices could include someone with the user's identity. This is not an estimate of personal attraction.
 - **Age:** broad global age bands are smoothed from UN population distributions. The current model continues to use this worldwide curve when countries are selected; it does not yet substitute each country's age structure.
 - **Relationship availability:** the proportion likely to be single and open to a relationship is an adjustable 38% starting assumption, not an age- or country-specific estimate. [UN World Marriage Data](https://www.un.org/development/desa/pd/node/3593) shows marital status by age and sex across 232 countries or areas, while the [OECD Family Database](https://www.oecd.org/en/data/datasets/oecd-family-database.html) documents differences in marriage, divorce, cohabitation, and partnership definitions.
-- **Religion and background:** religion uses broad global shares; cultural-background categories are coarse regional proxies and do not represent a complete ethnicity census.
+- **Religion and background:** religion uses broad global shares. Cultural-background selections use a U.S. Census-based crosswalk for the United States and the existing worldwide proxy for all other countries. When the United States is one of several selected countries, its background share and the worldwide fallback for the remaining countries are weighted by their populations.
 - **Income:** the selected minimum is modeled against GDP per capita for the chosen geography using a broad income-distribution approximation.
 - **Lifestyle and family preferences:** the non-smoker option uses 2022 CDC U.S. current-cigarette-smoking rates of 10.1% for women and 13.1% for men, with the overall 11.6% rate as a limited fallback for nonbinary selections. This U.S. proxy is currently used regardless of selected geography. The children and long-term-relationship options remain broad population-wide proxies.
 - **Weekly interactions:** users choose how many genuinely new people they meet, how locally relevant those encounters are, and the assumed probability of a meaningful mutual connection with an otherwise eligible person. These inputs change the probability timelines, not the eligible partner-pool count.
+
+### U.S. cultural-background crosswalk
+
+When the United States is selected, LoveRace replaces the worldwide background shares for the U.S. portion of the population with the following derived distribution:
+
+| LoveRace category | U.S. share | Worldwide fallback |
+| --- | ---: | ---: |
+| East or Southeast Asian heritage | 4.5% | 29% |
+| South Asian heritage | 2.0% | 25% |
+| Black or African-diaspora heritage | 12.1% | 18% |
+| European heritage | 57.5% | 9% |
+| Latin American or Caribbean heritage | 20.0% | 8% |
+| Middle Eastern or North African heritage | 1.1% | 6% |
+| Indigenous, mixed, or another background | 2.8% | 3% |
+
+The U.S. shares total 100%. They are a model crosswalk derived primarily from 2024 Census QuickFacts race and Hispanic-origin estimates, detailed Asian population estimates, and the 2020 detailed MENA response count. Census measures overlap, particularly because Hispanic origin can accompany any race and MENA responses were historically included within White. LoveRace converts those overlapping measures into mutually exclusive model categories to avoid double counting.
+
+For a selection containing the United States and other countries:
+
+```text
+background share =
+  (U.S. population × selected U.S. share
+  + other selected population × selected worldwide share)
+  / total selected population
+```
+
+If the United States is not selected, the existing worldwide shares remain unchanged.
 
 ## Reciprocal dating-openness evidence
 
@@ -129,6 +156,8 @@ No single high-quality global dataset measures every combination of gender ident
 | [2015 U.S. Transgender Survey](https://transequality.org/sites/default/files/docs/usts/USTS-Full-Report-Dec17.pdf) | Trans respondents' orientation distribution | N=27,715; large U.S. convenience sample, not a direct dating-willingness measure |
 | [World Bank GDP per capita](https://data.worldbank.org/indicator/NY.GDP.PCAP.CD) | Income-model calibration | GDP per capita is not the same as an individual's income |
 | [CDC, U.S. adult cigarette smoking, 2022](https://www.cdc.gov/tobacco/campaign/tips/resources/data/cigarette-smoking-in-united-states.html) | Non-smoker estimate by gender | Official U.S. proxy used regardless of selected geography; overall rate is the nonbinary fallback |
+| [U.S. Census QuickFacts](https://www.census.gov/quickfacts/fact/table/US/PST045224) | U.S. cultural-background crosswalk | 2024 race and Hispanic-origin baseline; broad model categories require a derived crosswalk |
+| [U.S. Census detailed MENA population, 2020](https://www.census.gov/library/stories/2023/09/2020-census-dhc-a-mena-population.html) | MENA component of the U.S. crosswalk | 3.5 million reported MENA alone or in combination; mapped into an exclusive model share |
 
 ## Modeling note and important limitations
 

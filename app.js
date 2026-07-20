@@ -174,6 +174,31 @@ function multiSelectFactor(name) {
   return Math.min(1, choices.reduce((sum, input) => sum + Number(input.value), 0));
 }
 
+function backgroundFactor() {
+  const choices = $$('input[name="backgroundChoice"]:checked');
+  if (!choices.length || choices.some(input => input.dataset.any === 'true')) return 1;
+  const globalShare = Math.min(1, choices.reduce((sum, input) => sum + Number(input.value), 0));
+  if (!state.selectedCountries.includes('USA')) return globalShare;
+
+  const selectedPopulation = state.selectedCountries.reduce((sum, code) => sum + (state.countryPopulations.get(code) || 0), 0);
+  const usPopulation = state.countryPopulations.get('USA') || 340_110_988;
+  const usShare = Math.min(1, choices.reduce((sum, input) => sum + Number(input.dataset.usValue || input.value), 0));
+  if (!selectedPopulation) return usShare;
+  const otherPopulation = Math.max(0, selectedPopulation - usPopulation);
+  return Math.min(1, (usPopulation * usShare + otherPopulation * globalShare) / selectedPopulation);
+}
+
+function updateBackgroundContext() {
+  const note = $('#backgroundContext');
+  if (state.selectedCountries.length === 1 && state.selectedCountries[0] === 'USA') {
+    note.innerHTML = 'Using a U.S. Census-based demographic crosswalk for the United States. <a href="https://www.census.gov/quickfacts/fact/table/US/PST045224" target="_blank" rel="noreferrer">U.S. Census QuickFacts ↗</a>';
+  } else if (state.selectedCountries.includes('USA')) {
+    note.innerHTML = 'The U.S. share of the selected population uses a U.S. Census-based crosswalk. Other selected countries retain the worldwide proxy and are combined in proportion to population.';
+  } else {
+    note.textContent = 'Using the worldwide fallback. Country-specific background data are currently applied only when the United States is selected.';
+  }
+}
+
 function multiSelectLabel(name, fallback, noun) {
   const choices = $$(`input[name="${name}"]:checked`);
   if (!choices.length || choices.some(input => input.dataset.any === 'true')) return fallback;
@@ -308,14 +333,14 @@ function calculateModel() {
   const minAge = Number($('#ageMin').value);
   const maxAge = Number($('#ageMax').value);
   const religionFactor = multiSelectFactor('religionChoice');
-  const backgroundFactor = multiSelectFactor('backgroundChoice');
+  const selectedBackgroundFactor = backgroundFactor();
   const factors = [
     { key: 'Gender mix', value: genderFactor(), show: state.step >= 2 },
     { key: 'Reciprocal dating openness', value: Number($('#orientationRate').value) / 100, show: state.step >= 2 },
     { key: `Age ${minAge}–${maxAge}`, value: ageShare(minAge, maxAge), show: state.step >= 3 },
     { key: 'Single & open', value: Number($('#availability').value) / 100, show: state.step >= 3 },
     { key: multiSelectLabel('religionChoice', 'Religion open', 'religions'), value: religionFactor, show: state.step >= 4 && religionFactor < 1 },
-    { key: multiSelectLabel('backgroundChoice', 'Background open', 'backgrounds'), value: backgroundFactor, show: state.step >= 4 && backgroundFactor < 1 },
+    { key: multiSelectLabel('backgroundChoice', 'Background open', 'backgrounds'), value: selectedBackgroundFactor, show: state.step >= 4 && selectedBackgroundFactor < 1 },
     { key: Number($('#income').value) ? `Income ≥ ${money(Number($('#income').value))}` : 'Income open', value: incomeShare(Number($('#income').value)), show: state.step >= 5 && Number($('#income').value) > 0 },
     { key: 'Children preference', value: Number(selectedValue('kids')), show: state.step >= 5 && Number(selectedValue('kids')) < 1 },
     { key: 'Non-smoker (U.S. gender estimate)', value: $('#nonSmoker').checked ? nonSmokerFactor() : 1, show: state.step >= 5 && $('#nonSmoker').checked },
@@ -343,7 +368,7 @@ function recalculate(announce = false) {
     ? 'Every person is included before filtering.'
     : `About 1 in every ${formatRatio(ratio)} people meets the filters modeled so far.`;
   $('#shareFill').style.width = `${Math.max(percent > 0 ? .7 : 0, Math.min(100, percent))}%`;
-  renderLedger(model.factors);
+  updateBackgroundContext();
   if (state.step === 6) renderOdds(model);
   if (announce) scheduleResultAnnouncement(model, percent);
 }
@@ -364,17 +389,6 @@ function uncertaintyForStep() {
   return [.02,.08,.17,.22,.27,.31,.35][state.step] || .35;
 }
 
-function renderLedger(factors) {
-  const ledger = $('#filterLedger');
-  const header = '<div class="ledger-title"><span>Your filters</span><span>effect</span></div>';
-  if (!factors.length && !state.selectedCountries.length) {
-    ledger.innerHTML = header + '<div class="ledger-empty">Your choices will appear here.</div>';
-    return;
-  }
-  const geo = state.selectedCountries.length ? `<div class="ledger-row"><span>Chosen geography</span><b>${compactFmt.format(state.basePopulation)}</b></div>` : '';
-  ledger.innerHTML = header + geo + factors.map(f => `<div class="ledger-row"><span>${f.key}</span><b>× ${f.value < .01 ? f.value.toFixed(3) : f.value.toFixed(2)}</b></div>`).join('');
-}
-
 function renderOdds(model) {
   $('#oddsPanel').classList.add('visible');
   const interactions = Number($('#interactions').value);
@@ -387,7 +401,6 @@ function renderOdds(model) {
     const weeks = Math.log(1-target/100) / Math.log(1-weekly);
     const duration = formatDuration(weeks);
     $(`#chance${target}`).textContent = duration;
-    $(`#inlineChance${target}`).textContent = duration;
   });
   $('#oddsFootnote').textContent = `${interactions} new people/week · ${(eligibleShare*100).toFixed(eligibleShare < .01 ? 3 : 1)}% meet modeled filters · ${Math.round(relevance*100)}% locally relevant · ${Math.round(spark*100)}% connection assumption. Encounters are treated as independent.`;
   if ($('#shareDialog').open) renderShareCard().catch(() => {
@@ -661,8 +674,8 @@ function showStep(nextStep) {
   $('#progressTrack').setAttribute('aria-valuenow', String(state.step + 1));
   $('#progressTrack').setAttribute('aria-valuetext', `Step ${state.step + 1} of 7`);
   $('#backButton').style.visibility = state.step ? 'visible' : 'hidden';
-  $('#nextButton span:first-child').textContent = state.step === 6 ? 'See results' : 'Continue';
-  $('#nextButton span:last-child').textContent = state.step === 6 ? '↑' : '→';
+  $('#nextButton span:first-child').textContent = state.step === 6 ? 'Share your results' : 'Continue';
+  $('#nextButton span:last-child').textContent = state.step === 6 ? '↗' : '→';
   if (state.step < 6) $('#oddsPanel').classList.remove('visible');
   if (state.step === 2) syncOrientationDefault();
   recalculate(true);
@@ -767,7 +780,7 @@ function bindEvents() {
     focusElement($('.step.active h2'));
   });
   $('#nextButton').addEventListener('click', () => state.step === 6
-    ? (scrollToElement($('.result-panel')), focusElement($('#resultsHeading')))
+    ? $('#openShare').click()
     : showStep(state.step + 1));
   $('#adjustInputs').addEventListener('click', () => {
     scrollToElement($('.final-step'));

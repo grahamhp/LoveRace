@@ -26,7 +26,7 @@
   <meta name="twitter:description" content="Explore how geography, demographics, preferences, and new encounters shape the probability of meeting a compatible partner." />
   <meta name="twitter:image" content="https://raceto.love/assets/social-preview.png" />
   <meta name="twitter:image:alt" content="LoveRace asks: How many people could be your person?" />
-  <link rel="stylesheet" href="styles.css?v=20260719d" />
+  <link rel="stylesheet" href="styles.css?v=20260719g" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -199,11 +199,11 @@
           <section class="step" data-step="4">
             <div class="eyebrow">Belief & background</div>
             <h2>What should feel familiar?</h2>
-            <p class="step-deck">Both are optional. Global categories are blunt instruments, so “open to any” is always the most statistically honest default.</p>
+            <p class="step-deck">Both are optional. Background shares adjust when the United States is selected; other countries currently use the worldwide proxy. “Open to any” remains the most statistically honest default.</p>
             <fieldset>
               <legend>Religion or worldview</legend>
               <details class="multi-select" id="religionSelect">
-                <summary><span id="religionSummary">Open to any religion or worldview</span><i>＋</i></summary>
+                <summary><span id="religionSummary">Open to any religion or worldview</span><i aria-hidden="true"></i></summary>
                 <div class="multi-select-menu">
                   <label class="multi-choice"><input type="checkbox" name="religionChoice" value="1" data-any="true" data-label="Open to any religion or worldview" checked /><span>Open to any religion or worldview</span></label>
                   <label class="multi-choice"><input type="checkbox" name="religionChoice" value="0.288" data-label="Christian" /><span>Christian</span></label>
@@ -220,21 +220,22 @@
             <fieldset>
               <legend>Cultural or regional background</legend>
               <details class="multi-select" id="backgroundSelect">
-                <summary><span id="backgroundSummary">Open to any background</span><i>＋</i></summary>
+                <summary><span id="backgroundSummary">Open to any background</span><i aria-hidden="true"></i></summary>
                 <div class="multi-select-menu">
                   <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="1" data-any="true" data-label="Open to any background" checked /><span>Open to any background</span></label>
-                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.29" data-label="East or Southeast Asian heritage" /><span>East or Southeast Asian heritage</span></label>
-                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.25" data-label="South Asian heritage" /><span>South Asian heritage</span></label>
-                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.18" data-label="Black or African-diaspora heritage" /><span>Black or African-diaspora heritage</span></label>
-                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.09" data-label="European heritage" /><span>European heritage</span></label>
-                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.08" data-label="Latin American or Caribbean heritage" /><span>Latin American or Caribbean heritage</span></label>
-                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.06" data-label="Middle Eastern or North African heritage" /><span>Middle Eastern or North African heritage</span></label>
-                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.03" data-label="Indigenous, mixed, or another background" /><span>Indigenous, mixed, or another background</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.29" data-us-value="0.045" data-label="East or Southeast Asian heritage" /><span>East or Southeast Asian heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.25" data-us-value="0.020" data-label="South Asian heritage" /><span>South Asian heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.18" data-us-value="0.121" data-label="Black or African-diaspora heritage" /><span>Black or African-diaspora heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.09" data-us-value="0.575" data-label="European heritage" /><span>European heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.08" data-us-value="0.200" data-label="Latin American or Caribbean heritage" /><span>Latin American or Caribbean heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.06" data-us-value="0.011" data-label="Middle Eastern or North African heritage" /><span>Middle Eastern or North African heritage</span></label>
+                  <label class="multi-choice"><input type="checkbox" name="backgroundChoice" value="0.03" data-us-value="0.028" data-label="Indigenous, mixed, or another background" /><span>Indigenous, mixed, or another background</span></label>
                 </div>
               </details>
-              <small class="field-caveat">Select any number. This is a low-confidence regional proxy, not an ethnicity census. Categories can overlap across identity, ancestry, and place, although the model adds them as broad population shares.</small>
+              <small class="field-caveat" id="backgroundContext">Using the worldwide fallback. Country-specific background data are currently applied only when the United States is selected.</small>
+              <small class="field-caveat">Select any number. The U.S. crosswalk converts overlapping Census race, Hispanic-origin, and ancestry measures into the model’s mutually exclusive broad categories. It is an approximation, not an identity census.</small>
             </fieldset>
-            <div class="data-note"><span class="confidence medium">Mixed confidence</span> Religion uses a measured global baseline; background is a coarse proxy and is labeled accordingly.</div>
+            <div class="data-note"><span class="confidence medium">Mixed confidence</span> Religion uses a measured global baseline. Background uses a U.S. Census-based crosswalk for the United States and a coarse worldwide proxy elsewhere.</div>
           </section>
 
           <section class="step" data-step="5">
@@ -283,14 +284,6 @@
               <div class="slider-line"><input id="spark" type="range" min="1" max="20" value="4" aria-describedby="sparkOutput sparkNote" /><output id="sparkOutput">4%</output></div>
               <small id="sparkNote">This is the most personal assumption in the model. Try 2–8% to see a realistic range.</small>
             </div>
-            <div class="inline-odds" aria-label="Live probability timeline">
-              <p>These three settings change the timeline below, not the number of potential people.</p>
-              <div>
-                <span><b>20%</b><output id="inlineChance20">Calculating…</output></span>
-                <span><b>50%</b><output id="inlineChance50">Calculating…</output></span>
-                <span><b>80%</b><output id="inlineChance80">Calculating…</output></span>
-              </div>
-            </div>
           </section>
         </form>
 
@@ -318,11 +311,6 @@
           <div class="share-caption"><span id="fractionLabel">100% of the starting population</span><span>remain</span></div>
         </div>
 
-        <div class="filter-ledger" id="filterLedger">
-          <div class="ledger-title"><span>Your filters</span><span>effect</span></div>
-          <div class="ledger-empty">Your choices will appear here.</div>
-        </div>
-
         <div class="odds-panel" id="oddsPanel" role="region" aria-labelledby="oddsHeading">
           <div class="odds-intro"><span id="oddsHeading">Live calculation</span> At your current pace, your estimated chance reaches…</div>
           <div class="odds-grid">
@@ -332,7 +320,7 @@
           </div>
           <p id="oddsFootnote"></p>
           <button class="adjust-button" id="adjustInputs" type="button"><span>Adjust weekly inputs</span><span>↓</span></button>
-          <button class="share-result-button" id="openShare" type="button"><span>Share your result</span><span aria-hidden="true">↗</span></button>
+          <button class="share-result-button" id="openShare" type="button"><span>Share your results</span><span aria-hidden="true">↗</span></button>
         </div>
 
         <button class="assumptions-button" id="openAssumptions" type="button">View assumptions & sources <span aria-hidden="true">＋</span></button>
@@ -390,7 +378,7 @@
       </div>
       <div class="method-copy">
         <h3>What is being modeled</h3>
-        <p>The model begins with the world population or the combined population of selected countries, then applies broad shares for partner gender, reciprocal dating openness, age, relationship availability, religion, background, income, and lifestyle preferences. Country selection changes the starting population and helps calibrate income. The other distributions remain worldwide or external proxies, including the global age curve.</p>
+        <p>The model begins with the world population or the combined population of selected countries, then applies broad shares for partner gender, reciprocal dating openness, age, relationship availability, religion, background, income, and lifestyle preferences. Country selection changes the starting population and helps calibrate income. When the United States is selected, its portion of the background estimate uses a U.S. Census-based crosswalk; other countries retain the worldwide proxy. The remaining distributions stay worldwide or use external proxies, including the global age curve.</p>
         <h3>The calculation</h3>
         <p><code>pool = population × each selected factor</code></p>
         <p><code>chance per encounter = pool share × geographic relevance × connection assumption</code></p>
@@ -402,6 +390,7 @@
           <li><strong>Several inputs are broad defaults.</strong> The 38% relationship-availability value is not calculated from age or country. Background categories can overlap even though their shares are added, and the current categories total 98%. Gender population shares are assumptions because no consistent worldwide measurement exists.</li>
           <li><strong>Orientation and dating openness are separate ideas.</strong> The user's orientation suggests an initial partner-gender selection, which the user can override. The selected partner genders drive the reciprocal dating-openness calculation. Estimates involving trans and nonbinary people rely on geographically limited studies and are marked as limited evidence.</li>
           <li><strong>The non-smoker estimate is U.S.-based.</strong> It uses 2022 CDC current-cigarette-smoking rates of 10.1% for women and 13.1% for men. The overall 11.6% rate is a limited fallback for nonbinary selections, and the U.S. proxy is currently used even when another geography is selected.</li>
+          <li><strong>U.S. background categories require a crosswalk.</strong> Census race, Hispanic-origin, and ancestry measures overlap and do not align exactly with LoveRace’s broad categories. The model converts them into a mutually exclusive distribution so selected shares can be combined without double counting.</li>
           <li><strong>The range is not a confidence interval.</strong> It is a sensitivity cue that broadens as assumptions are added. Meeting a filter also does not establish chemistry, timing, emotional availability, safety, reciprocal effort, or compatibility.</li>
         </ul>
         <h3>Data sources</h3>
@@ -417,11 +406,13 @@
           <li><a href="https://transequality.org/sites/default/files/docs/usts/USTS-Full-Report-Dec17.pdf" target="_blank" rel="noreferrer">2015 U.S. Transgender Survey</a><span>Trans respondents’ orientation distribution, N=27,715</span></li>
           <li><a href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CD" target="_blank" rel="noreferrer">World Bank: GDP per capita</a><span>Income-model calibration</span></li>
           <li><a href="https://www.cdc.gov/tobacco/campaign/tips/resources/data/cigarette-smoking-in-united-states.html" target="_blank" rel="noreferrer">CDC: U.S. adult cigarette smoking, 2022</a><span>Non-smoker estimate by gender; official U.S. proxy</span></li>
+          <li><a href="https://www.census.gov/quickfacts/fact/table/US/PST045224" target="_blank" rel="noreferrer">U.S. Census QuickFacts</a><span>2024 U.S. race and Hispanic-origin baseline for the background crosswalk</span></li>
+          <li><a href="https://www.census.gov/library/stories/2023/09/2020-census-dhc-a-mena-population.html" target="_blank" rel="noreferrer">U.S. Census: MENA population, 2020</a><span>Detailed MENA response count used in the U.S. crosswalk</span></li>
         </ul>
       </div>
     </div>
   </dialog>
 
-  <script src="app.js?v=20260719d"></script>
+  <script src="app.js?v=20260719g"></script>
 </body>
 </html>
